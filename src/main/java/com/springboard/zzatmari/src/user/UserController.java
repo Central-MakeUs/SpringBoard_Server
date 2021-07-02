@@ -16,7 +16,7 @@ import static com.springboard.zzatmari.config.BaseResponseStatus.*;
 import static com.springboard.zzatmari.utils.ValidationRegex.isRegexEmail;
 
 @RestController
-@RequestMapping("/app/users")
+@RequestMapping("/users")
 public class UserController {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
