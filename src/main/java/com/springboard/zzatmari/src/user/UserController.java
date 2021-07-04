@@ -37,6 +37,35 @@ public class UserController {
     }
 
     /**
+     * 하루시작, 종료시간 등록 API
+     * [POST] /users/time
+     * @return BaseResponse<PostUserRes>
+     */
+    @ResponseBody
+    @PostMapping("/time")
+    public BaseResponse<PostUserTimeRes> updateUserTime(@RequestBody PostUserTimeReq postUserTimeReq) {
+
+        int userIdx = 1;
+
+        //시간 형식체크
+        if(postUserTimeReq.getHour() >= 24 || postUserTimeReq.getHour() < 0 || postUserTimeReq.getMinute() >= 60 || postUserTimeReq.getMinute() < 0){
+            return new BaseResponse<>(USERS_TIME_INVALID);
+        }
+        try{
+            int isSuccess = userService.updateUserTime(postUserTimeReq, userIdx);
+
+            if(isSuccess == 1){
+                PostUserTimeRes response = new PostUserTimeRes(Integer.toString(postUserTimeReq.getHour()) + ":" + Integer.toString(postUserTimeReq.getMinute()));
+                return new BaseResponse<PostUserTimeRes>(response);
+            }
+            else
+                return new BaseResponse<>(REQUEST_FAIL);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
      * 회원 조회 API
      * [GET] /users
      * 회원 번호 및 이메일 검색 조회 API

@@ -19,6 +19,15 @@ public class UserDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    //하루 시작시간 설정
+    public int updateUserTime(PostUserTimeReq postUserTimeReq, int userIdx){
+        String updateUserTimeQuery = "UPDATE User SET dayStartHour=?, dayStartMinute=? WHERE idx=?;";
+
+        Object[] updateUserTimeParams = new Object[]{postUserTimeReq.getHour(), postUserTimeReq.getMinute(), userIdx};
+
+        return this.jdbcTemplate.update(updateUserTimeQuery,updateUserTimeParams);
+    }
+
     public List<GetUserRes> getUsers(){
         String getUsersQuery = "select * from UserInfo";
         return this.jdbcTemplate.query(getUsersQuery,

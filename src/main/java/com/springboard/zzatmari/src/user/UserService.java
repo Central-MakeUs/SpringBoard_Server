@@ -5,6 +5,7 @@ package com.springboard.zzatmari.src.user;
 import com.springboard.zzatmari.config.BaseException;
 import com.springboard.zzatmari.config.secret.Secret;
 import com.springboard.zzatmari.src.user.model.PostUserRes;
+import com.springboard.zzatmari.src.user.model.PostUserTimeReq;
 import com.springboard.zzatmari.utils.AES128;
 import com.springboard.zzatmari.utils.JwtService;
 import com.springboard.zzatmari.src.user.model.PatchUserReq;
@@ -32,6 +33,17 @@ public class UserService {
         this.userProvider = userProvider;
         this.jwtService = jwtService;
 
+    }
+
+    //하루 시작시간 등록
+    public int updateUserTime(PostUserTimeReq postUserTimeReq, int userIdx) throws BaseException {
+
+        try{
+            int isSuccess = userDao.updateUserTime(postUserTimeReq, userIdx);
+            return isSuccess;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
     //POST
