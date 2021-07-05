@@ -25,6 +25,11 @@ public enum BaseResponseStatus {
     // users
     USERS_TIME_INVALID(false, 2010, "시간단위를 확인해주세요"),
 
+    //lists
+    LISTS_TYPE_ERROR_TYPE(false, 2020, "리스트 타입은 0,1 값을 입력해주세요"),
+    LISTS_ITEM_EMPTY(false, 2021, "아이템을 1개 이상 입력해주세요"),
+    POST_LISTS_EXIST_NAME(false, 2022, "이미 존재하는 리스트 항목입니다"),
+
     // sample
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요"),
 

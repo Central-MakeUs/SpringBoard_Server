@@ -37,7 +37,7 @@ public class UserController {
     }
 
     /**
-     * 하루시작, 종료시간 등록 API
+     * 하루 시작시간 등록 API
      * [POST] /users/time
      * @return BaseResponse<PostUserRes>
      */
