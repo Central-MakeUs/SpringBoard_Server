@@ -37,6 +37,24 @@ public class UserController {
     }
 
     /**
+     * 임시 JWT 발급용 API
+     * [POST] /users/jwt
+     * @return BaseResponse<PostJWTRes>
+     */
+    @ResponseBody
+    @PostMapping("/jwt")
+    public BaseResponse<PostJWTRes> getJWT(@RequestBody PostJWTReq postJWTReq) {
+
+        int userIdx = postJWTReq.getUserIdx();
+        if(userIdx == 0) userIdx = 1;
+
+        String jwt = jwtService.createJwt(userIdx);
+        PostJWTRes response = new PostJWTRes(jwt, userIdx);
+        return new BaseResponse<PostJWTRes>(response);
+
+    }
+
+    /**
      * 하루 시작시간 등록 API
      * [POST] /users/time
      * @return BaseResponse<PostUserRes>
