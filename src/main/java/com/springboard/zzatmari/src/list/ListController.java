@@ -1,10 +1,9 @@
 package com.springboard.zzatmari.src.list;
 
+import com.springboard.zzatmari.src.list.model.GetListsRes;
 import com.springboard.zzatmari.src.list.model.PostListReq;
 import com.springboard.zzatmari.src.list.model.PostListRes;
-import com.springboard.zzatmari.src.user.UserProvider;
-import com.springboard.zzatmari.src.user.UserService;
-import com.springboard.zzatmari.src.user.model.*;
+import com.springboard.zzatmari.src.user.model.GetUserRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.springboard.zzatmari.config.BaseException;
@@ -15,9 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 import static com.springboard.zzatmari.config.BaseResponseStatus.*;
-import static com.springboard.zzatmari.utils.ValidationRegex.isRegexEmail;
 
 @RestController
 @RequestMapping("/lists")
@@ -44,9 +41,9 @@ public class ListController {
      */
     @ResponseBody
     @PostMapping("")
-    public BaseResponse<PostListRes> createLists(@RequestBody PostListReq postListReq) {
+    public BaseResponse<PostListRes> createLists(@RequestBody PostListReq postListReq) throws BaseException {
 
-        int userIdx = 1;
+        int userIdx = jwtService.getUserIdx();
 
         //빈값 체크
         if(postListReq.getListItem() == null && postListReq.getListItems() == null){
@@ -61,6 +58,31 @@ public class ListController {
         try{
             PostListRes response = listService.createLists(postListReq, userIdx);
             return new BaseResponse<PostListRes>(response);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 리스트 조회 API
+     * [GET] /lists?type=
+     * 리스트 조회 API
+     * query = type:[디지털디톡스, 자기계발, 목표]
+     * @return BaseResponse<List<GetListsRes>>
+     */
+    @ResponseBody
+    @GetMapping("")
+    public BaseResponse<List<GetListsRes>> getLists(@RequestParam(required = false) int type) {
+        try{
+
+            int userIdx = jwtService.getUserIdx();
+
+            if(type < 0 || type > 2){
+                return new BaseResponse<>(LISTS_TYPE_ERROR_TYPE);
+            }
+
+            List<GetListsRes> response = listProvider.getLists(userIdx, type);
+            return new BaseResponse<>(response);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }

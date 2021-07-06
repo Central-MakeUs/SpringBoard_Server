@@ -61,9 +61,9 @@ public class UserController {
      */
     @ResponseBody
     @PostMapping("/time")
-    public BaseResponse<PostUserTimeRes> updateUserTime(@RequestBody PostUserTimeReq postUserTimeReq) {
+    public BaseResponse<PostUserTimeRes> updateUserTime(@RequestBody PostUserTimeReq postUserTimeReq) throws BaseException {
 
-        int userIdx = 1;
+        int userIdx = jwtService.getUserIdx();
 
         //시간 형식체크
         if(postUserTimeReq.getHour() >= 24 || postUserTimeReq.getHour() < 0 || postUserTimeReq.getMinute() >= 60 || postUserTimeReq.getMinute() < 0){

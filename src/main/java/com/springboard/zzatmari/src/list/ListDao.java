@@ -1,5 +1,6 @@
 package com.springboard.zzatmari.src.list;
 
+import com.springboard.zzatmari.src.list.model.GetListsRes;
 import com.springboard.zzatmari.src.list.model.PostListReq;
 import com.springboard.zzatmari.src.list.model.PostListRes;
 import com.springboard.zzatmari.src.user.model.*;
@@ -48,5 +49,26 @@ public class ListDao {
                 int.class,
                 checkListItemParams);
 
+    }
+
+    //리스트 전체조회
+    public List<GetListsRes> selectLists(int userIdx, int type){
+        String selectListsQuery = "SELECT L.idx listIdx, L.listItem, ifnull(E.executionTime, 0) time FROM List L\n" +
+                "LEFT JOIN (SELECT listIdx, executionTime\n" +
+                "FROM Execution E JOIN User U on U.idx=E.userIdx\n" +
+                "WHERE E.createdAt >= CONCAT(DATE_FORMAT(CURDATE(),'%Y-%m-%d'),' ',TIME_FORMAT(CONCAT(U.dayStartHour, ':', U.dayStartMinute, ':00' ), '%H:%i:%S'))\n" +
+                "AND E.createdAt < CONCAT(DATE_FORMAT(CURDATE()+1,'%Y-%m-%d'),' ',TIME_FORMAT(CONCAT(U.dayStartHour, ':', U.dayStartMinute, ':00' ), '%H:%i:%S'))\n" +
+                ") E on L.idx=E.listIdx\n" +
+                "WHERE L.status=0 AND L.userIdx=? AND listType=?";
+        Object[] selectListsParams = new Object[]{userIdx, type};
+
+        return this.jdbcTemplate.query(selectListsQuery,
+        (rs,rowNum)-> new GetListsRes(
+                rs.getInt("listIdx"),
+                rs.getString("listItem"),
+                rs.getInt("time")
+        ),
+                selectListsParams
+        );
     }
 }

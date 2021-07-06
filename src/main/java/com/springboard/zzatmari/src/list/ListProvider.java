@@ -1,6 +1,7 @@
 package com.springboard.zzatmari.src.list;
 
 import com.springboard.zzatmari.config.BaseException;
+import com.springboard.zzatmari.src.list.model.GetListsRes;
 import com.springboard.zzatmari.src.user.model.GetUserRes;
 import com.springboard.zzatmari.utils.JwtService;
 import org.slf4j.Logger;
@@ -31,8 +32,18 @@ public class ListProvider {
     public int checkListItem(int userIdx, String listItem) throws BaseException{
         try{
             int checkListItemRes = listDao.checkListItem(userIdx, listItem);
-            System.out.println("ji");
             return checkListItemRes;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    //리스트 전체조회
+    public List<GetListsRes> getLists(int userIdx, int type) throws BaseException{
+        try{
+            List<GetListsRes> response = listDao.selectLists(userIdx, type);
+            return response;
         }
         catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
