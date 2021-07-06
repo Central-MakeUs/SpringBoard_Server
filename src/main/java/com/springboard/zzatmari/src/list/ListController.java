@@ -66,7 +66,6 @@ public class ListController {
     /**
      * 리스트 조회 API
      * [GET] /lists?type=
-     * 리스트 조회 API
      * query = type:[디지털디톡스, 자기계발, 목표]
      * @return BaseResponse<List<GetListsRes>>
      */

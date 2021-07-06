@@ -1,9 +1,8 @@
 package com.springboard.zzatmari.src.list;
 
+import com.springboard.zzatmari.src.goal.model.GetGoalsRes;
 import com.springboard.zzatmari.src.list.model.GetListsRes;
 import com.springboard.zzatmari.src.list.model.PostListReq;
-import com.springboard.zzatmari.src.list.model.PostListRes;
-import com.springboard.zzatmari.src.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -51,7 +50,7 @@ public class ListDao {
 
     }
 
-    //리스트 전체조회
+    //리스트 전체조회 (디지털디톡스, 자기계발)
     public List<GetListsRes> selectLists(int userIdx, int type){
         String selectListsQuery = "SELECT L.idx listIdx, L.listItem, ifnull(E.executionTime, 0) time FROM List L\n" +
                 "LEFT JOIN (SELECT listIdx, executionTime\n" +

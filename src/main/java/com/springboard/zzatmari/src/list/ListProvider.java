@@ -28,24 +28,24 @@ public class ListProvider {
         this.jwtService = jwtService;
     }
 
-    //리스트 중복 조회
-    public int checkListItem(int userIdx, String listItem) throws BaseException{
-        try{
+    //리스트 중복 체크
+    public int checkListItem(int userIdx, String listItem) throws BaseException {
+        try {
             int checkListItemRes = listDao.checkListItem(userIdx, listItem);
             return checkListItemRes;
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
     //리스트 전체조회
-    public List<GetListsRes> getLists(int userIdx, int type) throws BaseException{
-        try{
+    public List<GetListsRes> getLists(int userIdx, int type) throws BaseException {
+        try {
+
             List<GetListsRes> response = listDao.selectLists(userIdx, type);
             return response;
-        }
-        catch (Exception exception) {
+
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
