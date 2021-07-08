@@ -66,7 +66,7 @@ public class ListController {
     /**
      * 리스트 조회 API
      * [GET] /lists?type=
-     * query = type:[디지털디톡스, 자기계발, 목표]
+     * query = type:[디지털디톡스, 자기계발]
      * @return BaseResponse<List<GetListsRes>>
      */
     @ResponseBody
@@ -76,7 +76,7 @@ public class ListController {
 
             int userIdx = jwtService.getUserIdx();
 
-            if(type < 0 || type > 2){
+            if(type != 0 && type != 1){
                 return new BaseResponse<>(LISTS_TYPE_ERROR_TYPE);
             }
 
