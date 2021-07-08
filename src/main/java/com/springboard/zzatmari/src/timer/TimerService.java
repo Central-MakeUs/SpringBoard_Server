@@ -1,10 +1,14 @@
 package com.springboard.zzatmari.src.timer;
 
+import com.springboard.zzatmari.config.BaseException;
+import com.springboard.zzatmari.src.timer.model.PostTimerRes;
 import com.springboard.zzatmari.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static com.springboard.zzatmari.config.BaseResponseStatus.*;
 
 @Service
 public class TimerService {
@@ -21,5 +25,24 @@ public class TimerService {
         this.timerProvider = timerProvider;
         this.jwtService = jwtService;
 
+    }
+
+    //타이머 추가
+    public PostTimerRes createTimer(int userIdx, int time) throws BaseException {
+
+        try{
+            System.out.println(time);
+            //리스트 중복체크
+            System.out.println(timerProvider.checkTimers(userIdx, time));
+            if(timerProvider.checkTimers(userIdx, time) == 1){
+                throw new BaseException(TIMERS_EXIST_TIME);
+            }
+            System.out.println("hi");
+            int timerIdx = timerDao.insertTimer(userIdx, time);
+
+            return new PostTimerRes(timerIdx);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 }

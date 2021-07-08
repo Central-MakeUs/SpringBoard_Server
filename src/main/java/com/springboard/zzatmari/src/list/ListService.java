@@ -39,7 +39,6 @@ public class ListService {
                 System.out.println("ji");
                 throw new BaseException(POST_LISTS_EXIST_NAME);
             }
-            System.out.println("ji");
             int listIdx = listDao.insertLists(postListReq, userIdx);
 
             return new PostListRes(listIdx);

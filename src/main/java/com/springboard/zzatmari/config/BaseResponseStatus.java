@@ -30,6 +30,11 @@ public enum BaseResponseStatus {
     LISTS_ITEM_EMPTY(false, 2021, "아이템을 1개 이상 입력해주세요"),
     POST_LISTS_EXIST_NAME(false, 2022, "이미 존재하는 리스트 항목입니다"),
 
+    //timers
+    TIMERS_TIME_EMPTY(false, 2030, "타이머 시간을 1분이상 입력해주세요"),
+    TIMERS_TIME_ERROR_TYPE(false, 2031, "시간 형식을 올바르게 입력해주세요"),
+    TIMERS_EXIST_TIME(false, 2032, "이미 존재하는 타이머입니다"),
+
     // sample
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요"),
 

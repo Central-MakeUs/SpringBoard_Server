@@ -37,4 +37,24 @@ public class TimerDao {
         );
     }
 
+    //타이머 중복체크
+    public int checkTimer(int userIdx, int time){
+        String checkTimerQuery = "SELECT EXISTS(SELECT idx FROM Timer WHERE userIdx=? AND timer = ?)";
+        Object[] checkTimerParams = new Object[]{userIdx, time};
+        return this.jdbcTemplate.queryForObject(checkTimerQuery,
+                int.class,
+                checkTimerParams);
+
+    }
+
+    //타이머 추가
+    public int insertTimer(int userIdx, int time){
+        String insertTimerQuery = "INSERT INTO Timer(userIdx, timer) VALUES(?, ?)";
+
+        Object[] insertTimerParams = new Object[]{userIdx, time};
+        this.jdbcTemplate.update(insertTimerQuery, insertTimerParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+    }
 }
