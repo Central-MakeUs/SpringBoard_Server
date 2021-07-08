@@ -42,7 +42,7 @@ public class ListDao {
 
     //리스트 아이템 중복체크
     public int checkListItem(int userIdx, String listItem){
-        String checkListItemQuery = "select exists(select listItem from List where listItem=? and userIdx=? and status=0;)";
+        String checkListItemQuery = "select exists(select listItem from List where listItem=? and userIdx=? and status=0)";
         Object[] checkListItemParams = new Object[]{listItem, userIdx};
         return this.jdbcTemplate.queryForObject(checkListItemQuery,
                 int.class,

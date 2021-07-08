@@ -31,8 +31,7 @@ public class ListProvider {
     //리스트 중복 체크
     public int checkListItem(int userIdx, String listItem) throws BaseException {
         try {
-            int checkListItemRes = listDao.checkListItem(userIdx, listItem);
-            return checkListItemRes;
+            return listDao.checkListItem(userIdx, listItem);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

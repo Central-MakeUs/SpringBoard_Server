@@ -35,10 +35,10 @@ public class ListService {
 
         try{
             //리스트 중복체크
-            if(postListReq.getListItem() != null && listProvider.checkListItem(userIdx, postListReq.getListItem()) == 1){
-                System.out.println("ji");
+            if(postListReq.getListItem() != null && listProvider.checkListItem(userIdx, postListReq.getListItem()) >= 1){
                 throw new BaseException(POST_LISTS_EXIST_NAME);
             }
+
             int listIdx = listDao.insertLists(postListReq, userIdx);
 
             return new PostListRes(listIdx);
