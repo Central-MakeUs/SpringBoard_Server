@@ -20,7 +20,7 @@ public class TimerDao {
 
     //타이머 전체조회
     public List<GetTimersRes> selectTimers(int userIdx){
-        String selectTimersQuery = "SELECT hour, minute,\n" +
+        String selectTimersQuery = "SELECT T.idx timerIdx, hour, minute,\n" +
                 "       DATE_FORMAT(DATE_ADD(DATE_ADD(now(), INTERVAL hour HOUR), INTERVAL minute MINUTE), '%H:%i') time\n" +
                 "FROM (SELECT idx, ifnull(case when timer >= 60 then TRUNCATE(timer/60, 0) end, 0) hour, timer%60 minute FROM Timer WHERE userIdx=?) T\n" +
                 "ORDER BY time";
@@ -28,6 +28,7 @@ public class TimerDao {
 
         return this.jdbcTemplate.query(selectTimersQuery,
                 (rs,rowNum)-> new GetTimersRes(
+                        rs.getInt("timerIdx"),
                         rs.getInt("hour"),
                         rs.getInt("minute"),
                         rs.getString("time")

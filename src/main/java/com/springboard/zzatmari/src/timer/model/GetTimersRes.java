@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetTimersRes {
+    private int timerIdx;
     private int hour;
     private int minute;
     private String time;
