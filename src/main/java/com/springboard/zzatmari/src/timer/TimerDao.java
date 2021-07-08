@@ -44,7 +44,6 @@ public class TimerDao {
         return this.jdbcTemplate.queryForObject(checkTimerQuery,
                 int.class,
                 checkTimerParams);
-
     }
 
     //타이머 추가

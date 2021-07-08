@@ -30,16 +30,13 @@ public class TimerService {
     //타이머 추가
     public PostTimerRes createTimer(int userIdx, int time) throws BaseException {
 
-        try{
-            System.out.println(time);
-            //리스트 중복체크
-            System.out.println(timerProvider.checkTimers(userIdx, time));
-            if(timerProvider.checkTimers(userIdx, time) == 1){
-                throw new BaseException(TIMERS_EXIST_TIME);
-            }
-            System.out.println("hi");
-            int timerIdx = timerDao.insertTimer(userIdx, time);
+        //타이머 중복체크
+        if(timerProvider.checkTimers(userIdx, time) == 1){
+            throw new BaseException(TIMERS_EXIST_TIME);
+        }
 
+        try{
+            int timerIdx = timerDao.insertTimer(userIdx, time);
             return new PostTimerRes(timerIdx);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

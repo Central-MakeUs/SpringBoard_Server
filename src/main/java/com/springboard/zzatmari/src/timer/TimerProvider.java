@@ -42,8 +42,7 @@ public class TimerProvider{
     //타이머 중복체크
     public int checkTimers(int userIdx, int time) throws BaseException {
         try {
-            int result = timerDao.checkTimer(userIdx, time);
-            return result;
+            return timerDao.checkTimer(userIdx, time);
 
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
