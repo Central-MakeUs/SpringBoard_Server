@@ -22,9 +22,9 @@ public class GoalDao {
     //목표조회
     public GetGoalsRes selectGoals(int userIdx){
 
-        String selectGoalsQuery = "SELECT L.idx listIdx, L.listItem, G.goalTime time\n" +
-                "FROM Goal G JOIN List L ON G.listIdx=L.idx\n" +
-                "WHERE G.userIdx=? AND listType=?";
+        String selectGoalsQuery = "SELECT L.idx listIdx, L.listItem, IFNULL(G.goalTime,0) time\n" +
+                "FROM  List L LEFT JOIN Goal G ON G.listIdx=L.idx\n" +
+                "WHERE L.userIdx=? AND listType=?";
         Object[] selectGoalsParams1 = new Object[]{userIdx, 0};
         Object[] selectGoalsParams2 = new Object[]{userIdx, 1};
 
