@@ -42,4 +42,20 @@ public class TimerService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    //타이머 수정
+    public PostTimerRes updateTimer(int userIdx, int timerIdx, int time) throws BaseException {
+
+        //타이머 중복체크
+        if(timerProvider.checkTimers(userIdx, time) == 1){
+            throw new BaseException(TIMERS_EXIST_TIME);
+        }
+
+        try{
+            timerDao.updateTimer(timerIdx, time);
+            return new PostTimerRes(timerIdx);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

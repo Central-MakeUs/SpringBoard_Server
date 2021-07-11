@@ -56,4 +56,12 @@ public class TimerDao {
         String lastInsertIdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
     }
+
+    //타이머 수정
+    public int updateTimer(int timerIdx, int time){
+        String updateTimerQuery = "UPDATE Timer Set timer=? WHERE idx=?";
+
+        Object[] updateTimerParams = new Object[]{time, timerIdx};
+        return this.jdbcTemplate.update(updateTimerQuery, updateTimerParams);
+    }
 }

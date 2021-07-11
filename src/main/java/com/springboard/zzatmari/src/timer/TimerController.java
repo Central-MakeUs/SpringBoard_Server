@@ -82,6 +82,38 @@ public class TimerController {
         }
     }
 
+    /**
+     * 타이머 수정 API
+     * [PATCH] /timers/:timerIdx
+     * @return BaseResponse<PostTimerRes>
+     */
+    @ResponseBody
+    @PatchMapping("{timerIdx}")
+    public BaseResponse<PostTimerRes> updateTimers(@PathVariable("timerIdx") int timerIdx, @RequestBody PostTimerReq postTimerReq) throws BaseException {
+
+        int userIdx = jwtService.getUserIdx();
+
+        //빈값 체크
+        if(postTimerReq.getHour() == 0 && postTimerReq.getMinute() == 0){
+            return new BaseResponse<>(TIMERS_TIME_EMPTY);
+        }
+
+        //형식 체크
+        if(postTimerReq.getHour() < 0 || postTimerReq.getHour() >= 24 || postTimerReq.getMinute() < 0 || postTimerReq.getMinute() >= 60){
+            return new BaseResponse<>(TIMERS_TIME_ERROR_TYPE);
+        }
+
+        //시간 + 분 -> 분 변환
+        int time = postTimerReq.getHour() * 60 + postTimerReq.getMinute();
+
+        try{
+            PostTimerRes response = timerService.updateTimer(userIdx, timerIdx, time);
+            return new BaseResponse<PostTimerRes>(response);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 }
 
 
