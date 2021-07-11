@@ -1,7 +1,10 @@
 package com.springboard.zzatmari.src.goal;
 
 import com.springboard.zzatmari.src.goal.model.GetGoalsRes;
+import com.springboard.zzatmari.src.goal.model.PostGoalReq;
 import com.springboard.zzatmari.src.list.model.GetListsRes;
+import com.springboard.zzatmari.src.user.model.PatchUserReq;
+import com.springboard.zzatmari.src.user.model.PostUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -45,5 +48,30 @@ public class GoalDao {
         );
 
         return new GetGoalsRes(result1, result2);
+    }
+
+    //목표 중복체크
+    public int checkGoal(int userIdx,int listIdx){
+        String checkGoalsQuery = "SELECT EXISTS(SELECT ListIdx FROM Goal WHERE listIdx=? AND userIdx=?)";
+        Object[] checkGoalsParams = new Object[]{listIdx, userIdx};
+        return this.jdbcTemplate.queryForObject(checkGoalsQuery,
+                int.class,
+                checkGoalsParams);
+
+    }
+
+    //목표 업데이트
+    public int updateGoal(int userIdx, PostGoalReq postGoalReq){
+        String updateGoalQuery = "UPDATE Goal SET goalTime=? WHERE userIdx=? AND listIdx=?";
+        Object[] updateGoalParams = new Object[]{postGoalReq.getTime(), userIdx, postGoalReq.getListIdx()};
+
+        return this.jdbcTemplate.update(updateGoalQuery,updateGoalParams);
+    }
+
+    //목표 추가
+    public int insertGoal(int userIdx, PostGoalReq postGoalReq){
+        String insertGoalQuery = "INSERT INTO Goal(userIdx, listIdx, goalTime) VALUES(?,?,?)";
+        Object[] insertGoalParams = new Object[]{userIdx, postGoalReq.getListIdx(), postGoalReq.getTime()};
+        return this.jdbcTemplate.update(insertGoalQuery, insertGoalParams);
     }
 }

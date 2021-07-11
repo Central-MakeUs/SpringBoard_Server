@@ -35,6 +35,10 @@ public enum BaseResponseStatus {
     TIMERS_TIME_ERROR_TYPE(false, 2031, "시간 형식을 올바르게 입력해주세요"),
     TIMERS_EXIST_TIME(false, 2032, "이미 존재하는 타이머입니다"),
 
+    //goals
+    GOALS_LIST_ID_EMPTY(false, 2040, "listIdx를 입력해주세요"),
+    GOALS_TIME_ERROR_TYPE(false, 2041, "목표시간은 0분 이상 입력해주세요"),
+
     // sample
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요"),
 

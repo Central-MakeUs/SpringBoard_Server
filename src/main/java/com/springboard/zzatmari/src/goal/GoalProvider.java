@@ -30,8 +30,17 @@ public class GoalProvider {
     public GetGoalsRes getGoals(int userIdx) throws BaseException{
         try{
             GetGoalsRes response = goalDao.selectGoals(userIdx);
-            System.out.println(response);
             return response;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    //목표 중복체크
+    public int checkGoal(int userIdx, int listIdx) throws BaseException{
+        try{
+            return goalDao.checkGoal(userIdx, listIdx);
         }
         catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
