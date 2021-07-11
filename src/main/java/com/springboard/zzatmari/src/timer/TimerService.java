@@ -52,7 +52,23 @@ public class TimerService {
         }
 
         try{
-            timerDao.updateTimer(timerIdx, time);
+            int result = timerDao.updateTimer(timerIdx, time);
+            if(result == 0)
+                throw new BaseException(REQUEST_FAIL);
+            return new PostTimerRes(timerIdx);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    //타이머 수정
+    public PostTimerRes deleteTimer(int timerIdx) throws BaseException {
+
+        try{
+            int result = timerDao.deleteTimer(timerIdx);
+            if(result == 0)
+                throw new BaseException(REQUEST_FAIL);
+
             return new PostTimerRes(timerIdx);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

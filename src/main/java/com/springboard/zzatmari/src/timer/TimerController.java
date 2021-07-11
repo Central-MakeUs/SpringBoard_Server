@@ -93,6 +93,10 @@ public class TimerController {
 
         int userIdx = jwtService.getUserIdx();
 
+        if(timerIdx <= 0){
+            return new BaseResponse<>(TIMERS_ID_EMPTY);
+        }
+
         //빈값 체크
         if(postTimerReq.getHour() == 0 && postTimerReq.getMinute() == 0){
             return new BaseResponse<>(TIMERS_TIME_EMPTY);
@@ -108,6 +112,30 @@ public class TimerController {
 
         try{
             PostTimerRes response = timerService.updateTimer(userIdx, timerIdx, time);
+            return new BaseResponse<PostTimerRes>(response);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 타이머 삭제 API
+     * [DELETE] /timers/:timerIdx
+     * @return BaseResponse<PostTimerRes>
+     */
+    @ResponseBody
+    @DeleteMapping("{timerIdx}")
+    public BaseResponse<PostTimerRes> deleteTimers(@PathVariable("timerIdx") int timerIdx) throws BaseException {
+
+        int userIdx = jwtService.getUserIdx();
+
+        //빈값 체크
+        if(timerIdx <= 0){
+            return new BaseResponse<>(TIMERS_ID_EMPTY);
+        }
+
+        try{
+            PostTimerRes response = timerService.deleteTimer(timerIdx);
             return new BaseResponse<PostTimerRes>(response);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));

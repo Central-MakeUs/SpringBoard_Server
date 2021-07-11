@@ -64,4 +64,12 @@ public class TimerDao {
         Object[] updateTimerParams = new Object[]{time, timerIdx};
         return this.jdbcTemplate.update(updateTimerQuery, updateTimerParams);
     }
+
+    //타이머 삭제
+    public int deleteTimer(int timerIdx){
+        String deleteTimerQuery = "DELETE FROM Timer WHERE idx=?";
+
+        Object[] deleteTimerParams = new Object[]{timerIdx};
+        return this.jdbcTemplate.update(deleteTimerQuery, deleteTimerParams);
+    }
 }
