@@ -72,4 +72,15 @@ public class TimerDao {
         Object[] deleteTimerParams = new Object[]{timerIdx};
         return this.jdbcTemplate.update(deleteTimerQuery, deleteTimerParams);
     }
+
+    //타이머 1개 조회
+    public int selectTimer(int timerIdx){
+        String selectTimerQuery = "SELECT timer FROM Timer WHERE idx=?";
+        Object[] selectTimersParams = new Object[]{timerIdx};
+
+        return this.jdbcTemplate.queryForObject(selectTimerQuery,
+                int.class,
+                selectTimersParams
+        );
+    }
 }

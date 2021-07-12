@@ -40,6 +40,10 @@ public enum BaseResponseStatus {
     GOALS_LIST_ID_EMPTY(false, 2040, "listIdx를 입력해주세요"),
     GOALS_TIME_ERROR_TYPE(false, 2041, "목표시간은 0분 이상 입력해주세요"),
 
+    //execution
+    EXECUTION_LIST_ID_EMPTY(false, 2050, "listIdx를 입력해주세요"),
+    EXECUTION_TIMER_ID_EMPTY(false, 2051, "timerIdx를 입력해주세요"),
+
     // sample
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요"),
 

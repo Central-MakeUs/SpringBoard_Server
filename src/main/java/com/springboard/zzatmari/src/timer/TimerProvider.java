@@ -49,4 +49,14 @@ public class TimerProvider{
         }
     }
 
+    //타이머 1개 시간조회
+    public int getTimer(int timerIdx) throws BaseException {
+        try {
+            return timerDao.selectTimer(timerIdx);
+
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 }

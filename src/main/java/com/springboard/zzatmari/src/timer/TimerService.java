@@ -61,7 +61,7 @@ public class TimerService {
         }
     }
 
-    //타이머 수정
+    //타이머 삭제
     public PostTimerRes deleteTimer(int timerIdx) throws BaseException {
 
         try{
