@@ -40,10 +40,8 @@ public class ListProvider {
     //리스트 전체조회
     public List<GetListsRes> getLists(int userIdx, int type) throws BaseException {
         try {
-
-            List<GetListsRes> response = listDao.selectLists(userIdx, type);
-            return response;
-
+            System.out.println("hihi");
+            return listDao.selectLists(userIdx, type);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

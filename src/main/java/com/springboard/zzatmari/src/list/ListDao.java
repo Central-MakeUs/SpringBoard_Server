@@ -52,8 +52,8 @@ public class ListDao {
 
     //리스트 전체조회 (디지털디톡스, 자기계발)
     public List<GetListsRes> selectLists(int userIdx, int type){
-        String selectListsQuery = "SELECT L.idx listIdx, L.listItem, ifnull(E.executionTime, 0) time FROM List L\n" +
-                "LEFT JOIN (SELECT listIdx, executionTime\n" +
+        String selectListsQuery = "SELECT L.idx listIdx, L.listItem, ifnull(E.min, 0) time  FROM List L\n" +
+                "LEFT JOIN (SELECT listIdx, min\n" +
                 "FROM Execution E JOIN User U on U.idx=E.userIdx\n" +
                 "WHERE E.createdAt >= CONCAT(DATE_FORMAT(CURDATE(),'%Y-%m-%d'),' ',TIME_FORMAT(CONCAT(U.dayStartHour, ':', U.dayStartMinute, ':00' ), '%H:%i:%S'))\n" +
                 "AND E.createdAt < CONCAT(DATE_FORMAT(CURDATE()+1,'%Y-%m-%d'),' ',TIME_FORMAT(CONCAT(U.dayStartHour, ':', U.dayStartMinute, ':00' ), '%H:%i:%S'))\n" +
