@@ -80,4 +80,24 @@ public class ExecutionService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    //실행 재개
+    public void continueExecution(int userIdx) throws BaseException {
+
+        Execution execution = executionProvider.getExecutionDetail(userIdx);
+
+        if(execution.getStatus()!=1)
+            throw new BaseException(EXECUTION_PAUSE_NOT_EXIST);
+
+        try{
+
+            int result = executionDao.continueExecution(userIdx);
+
+            if(result == 0)
+                throw new BaseException(REQUEST_FAIL);
+
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

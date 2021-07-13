@@ -64,6 +64,7 @@ public enum BaseResponseStatus {
 
     //Execution
     EXECUTION_NOT_EXIST(false, 3050, "실행중인 타이머가 없습니다"),
+    EXECUTION_PAUSE_NOT_EXIST(false, 3051, "일시정지 상태의 타이머가 없습니다"),
 
     // [POST] /users
     DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다"),

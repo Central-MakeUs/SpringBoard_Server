@@ -106,5 +106,25 @@ public class ExecutionController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /**
+     * 실행 재개 API
+     * [PATCH] /execution/continue
+     * @return BaseResponse<>
+     */
+    @ResponseBody
+    @PatchMapping("/continue")
+    public BaseResponse<String> continueExecution() throws BaseException {
+
+        int userIdx = jwtService.getUserIdx();
+
+        try{
+            executionService.continueExecution(userIdx);
+            return new BaseResponse<String>("");
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }
 
