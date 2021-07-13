@@ -43,6 +43,8 @@ public enum BaseResponseStatus {
     //execution
     EXECUTION_LIST_ID_EMPTY(false, 2050, "listIdx를 입력해주세요"),
     EXECUTION_TIMER_ID_EMPTY(false, 2051, "timerIdx를 입력해주세요"),
+    EXECUTION_TIME_ERROR_TYPE(false, 2052, "남은 시간 형식을 확인해주세요"),
+
 
     // sample
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요"),

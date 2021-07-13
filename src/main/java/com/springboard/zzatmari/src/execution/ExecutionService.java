@@ -1,20 +1,22 @@
 package com.springboard.zzatmari.src.execution;
 
 import com.springboard.zzatmari.config.BaseException;
+import com.springboard.zzatmari.src.execution.model.Execution;
+import com.springboard.zzatmari.src.execution.model.PatchExecutionReq;
 import com.springboard.zzatmari.src.execution.model.PostExecutionStartReq;
 import com.springboard.zzatmari.src.execution.model.PostExecutionStartRes;
 import com.springboard.zzatmari.src.goal.GoalDao;
 import com.springboard.zzatmari.src.goal.GoalProvider;
 import com.springboard.zzatmari.src.goal.model.PostGoalReq;
 import com.springboard.zzatmari.src.timer.TimerProvider;
+import com.springboard.zzatmari.src.timer.model.PostTimerRes;
 import com.springboard.zzatmari.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.springboard.zzatmari.config.BaseResponseStatus.DATABASE_ERROR;
-import static com.springboard.zzatmari.config.BaseResponseStatus.REQUEST_FAIL;
+import static com.springboard.zzatmari.config.BaseResponseStatus.*;
 
 @Service
 public class ExecutionService {
@@ -45,6 +47,34 @@ public class ExecutionService {
             //추가
             int executionIdx = executionDao.insertExecution(userIdx, postExecutionStartReq.getListIdx(), time);
             return new PostExecutionStartRes(executionIdx);
+
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    //실행 일시정지
+    public void pauseExecution(int userIdx, PatchExecutionReq patchExecutionReq) throws BaseException {
+
+        Execution execution = executionProvider.getExecutionDetail(userIdx);
+
+        if(execution.getStatus()!=0)
+            throw new BaseException(EXECUTION_NOT_EXIST);
+
+        try{
+            //수행시간
+            int min = execution.getTimer() - patchExecutionReq.getMin() - 1;
+            int sec = 60 - patchExecutionReq.getSec();
+
+            if(sec == 60){
+                min += 1;
+                sec = 0;
+            }
+
+            int result = executionDao.pauseExecution(userIdx, min, sec);
+
+            if(result == 0)
+                throw new BaseException(REQUEST_FAIL);
 
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

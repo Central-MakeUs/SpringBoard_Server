@@ -2,6 +2,7 @@ package com.springboard.zzatmari.src.execution;
 
 import com.springboard.zzatmari.config.BaseException;
 import com.springboard.zzatmari.config.BaseResponse;
+import com.springboard.zzatmari.src.execution.model.Execution;
 import com.springboard.zzatmari.src.execution.model.GetExecutionRes;
 import com.springboard.zzatmari.src.execution.model.PostExecutionStartReq;
 import com.springboard.zzatmari.src.execution.model.PostExecutionStartRes;
@@ -40,6 +41,17 @@ public class ExecutionProvider {
 
         try{
             return executionDao.selectExecution(userIdx);
+
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    //실행 정보조회
+    public Execution getExecutionDetail(int userIdx) throws BaseException {
+
+        try{
+            return executionDao.selectExecutionDetail(userIdx);
 
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

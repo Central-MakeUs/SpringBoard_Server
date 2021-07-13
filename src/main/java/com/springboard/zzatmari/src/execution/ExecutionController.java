@@ -3,6 +3,7 @@ package com.springboard.zzatmari.src.execution;
 import com.springboard.zzatmari.config.BaseException;
 import com.springboard.zzatmari.config.BaseResponse;
 import com.springboard.zzatmari.src.execution.model.GetExecutionRes;
+import com.springboard.zzatmari.src.execution.model.PatchExecutionReq;
 import com.springboard.zzatmari.src.execution.model.PostExecutionStartReq;
 import com.springboard.zzatmari.src.execution.model.PostExecutionStartRes;
 import com.springboard.zzatmari.src.goal.model.PostGoalReq;
@@ -73,6 +74,33 @@ public class ExecutionController {
         try{
             GetExecutionRes response = executionProvider.getExecution(userIdx);
             return new BaseResponse<GetExecutionRes>(response);
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 실행 일시정지 API
+     * [PATCH] /execution/pause
+     * @return BaseResponse<>
+     */
+    @ResponseBody
+    @PatchMapping("/pause")
+    public BaseResponse<String> pauseExecution(@RequestBody PatchExecutionReq patchExecutionReq) throws BaseException {
+
+        int userIdx = jwtService.getUserIdx();
+
+        //빈값체크
+        if(patchExecutionReq.getMin() < 0)
+            return new BaseResponse<>(EXECUTION_TIME_ERROR_TYPE);
+
+        if(patchExecutionReq.getSec() < 0 || patchExecutionReq.getSec() >= 60)
+            return new BaseResponse<>(EXECUTION_TIME_ERROR_TYPE);
+
+        try{
+            executionService.pauseExecution(userIdx, patchExecutionReq);
+            return new BaseResponse<String>("");
 
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));

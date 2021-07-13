@@ -1,6 +1,8 @@
 package com.springboard.zzatmari.src.execution;
 
+import com.springboard.zzatmari.src.execution.model.Execution;
 import com.springboard.zzatmari.src.execution.model.GetExecutionRes;
+import com.springboard.zzatmari.src.execution.model.PatchExecutionReq;
 import com.springboard.zzatmari.src.goal.model.PostGoalReq;
 import com.springboard.zzatmari.src.list.model.GetListsRes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,5 +59,31 @@ public class ExecutionDao {
                 int.class,
                 checkExecutionParams);
 
+    }
+
+    //실행 일시정지
+    public int pauseExecution(int userIdx, int min, int sec){
+        String pauseExecutionQuery = "UPDATE Execution SET status=1,min=?,sec=? WHERE userIdx=? AND status=0;";
+        Object[] pauseExecutionParams = new Object[]{min, sec, userIdx};
+
+        return this.jdbcTemplate.update(pauseExecutionQuery, pauseExecutionParams);
+    }
+
+    //실행 상세조회
+    public Execution selectExecutionDetail(int userIdx){
+
+        String selectExecutionDetailQuery = "SELECT min, sec, status, timer" +
+                " FROM Execution WHERE userIdx=? AND (status=0 OR status=1)";
+        Object[] selectExecutionDetailParams = new Object[]{userIdx};
+
+        return this.jdbcTemplate.queryForObject(selectExecutionDetailQuery,
+                (rs,rowNum)-> new Execution(
+                        rs.getInt("min"),
+                        rs.getInt("sec"),
+                        rs.getInt("status"),
+                        rs.getInt("timer")
+                ),
+                selectExecutionDetailParams
+        );
     }
 }
