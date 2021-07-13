@@ -77,6 +77,14 @@ public class ExecutionDao {
         return this.jdbcTemplate.update(pauseExecutionQuery, pauseExecutionParams);
     }
 
+    //실행 완료
+    public int completeExecution(int userIdx, int min, int sec){
+        String pauseExecutionQuery = "UPDATE Execution SET status=2,min=?,sec=? WHERE userIdx=? AND (status=0 OR status=1);";
+        Object[] pauseExecutionParams = new Object[]{min, sec, userIdx};
+
+        return this.jdbcTemplate.update(pauseExecutionQuery, pauseExecutionParams);
+    }
+
     //실행 상세조회
     public Execution selectExecutionDetail(int userIdx){
 

@@ -100,4 +100,32 @@ public class ExecutionService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    //실행 완료
+    public void completeExecution(int userIdx, PatchExecutionReq patchExecutionReq) throws BaseException {
+
+        Execution execution = executionProvider.getExecutionDetail(userIdx);
+
+        if(execution.getStatus()!=0 && execution.getStatus()!=1)
+            throw new BaseException(EXECUTION_NOT_EXIST);
+
+        try{
+            //수행시간
+            int min = execution.getTimer() - patchExecutionReq.getMin() - 1;
+            int sec = 60 - patchExecutionReq.getSec();
+
+            if(sec == 60){
+                min += 1;
+                sec = 0;
+            }
+
+            int result = executionDao.completeExecution(userIdx, min, sec);
+
+            if(result == 0)
+                throw new BaseException(REQUEST_FAIL);
+
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }
