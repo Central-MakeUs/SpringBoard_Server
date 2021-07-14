@@ -59,14 +59,15 @@ public class ListService {
     public void modifyList(int userIdx, int listIdx, PatchListReq patchListReq) throws BaseException {
 
         //리스트 idx 체크
-        /*if(listProvider.checkListIdx(listIdx) == 0)
-            throw new BaseException(LIST_ID_NOT_EXIST);*/
+        Lists check = listProvider.checkListIdx(listIdx);
+        if(check.getCount() == 0)
+            throw new BaseException(LIST_ID_NOT_EXIST);
+        else if(check.getUserIdx() != userIdx)
+            throw new BaseException(LIST_USER_NOT_MATCH);
 
         Lists list = listProvider.checkListItem(userIdx, patchListReq.getListItem());
+
         //리스트 중복체크
-        if(list.getUserIdx() != userIdx){
-            throw new BaseException(LIST_USER_NOT_MATCH);
-        }
         if(list.getCount() > 0){
             if(list.getStatus()==0)
                 throw new BaseException(LISTS_EXIST_NAME);

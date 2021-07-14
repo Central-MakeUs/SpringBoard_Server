@@ -39,7 +39,7 @@ public class ListProvider {
     }
 
     //리스트 존재여부 체크
-    public int checkListIdx(int listIdx) throws BaseException {
+    public Lists checkListIdx(int listIdx) throws BaseException {
         try {
             return listDao.checkListIdx(listIdx);
         } catch (Exception exception) {

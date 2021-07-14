@@ -55,11 +55,15 @@ public class ListDao {
     }
 
     //리스트 존재여부
-    public int checkListIdx(int listIdx){
-        String checkListIdxQuery = "select exists(select idx from List where idx=?)";
+    public Lists checkListIdx(int listIdx){
+        String checkListIdxQuery = "select count(*) count, ifnull(status, 0) status, ifnull(userIdx, 0) userIdx\n" +
+                "from (select status, userIdx from List where idx=?) L";
         Object[] checkListIdxParams = new Object[]{listIdx};
         return this.jdbcTemplate.queryForObject(checkListIdxQuery,
-                int.class,
+                (rs,rowNum)-> new Lists(
+                        rs.getInt("count"),
+                        rs.getInt("status"),
+                        rs.getInt("userIdx")),
                 checkListIdxParams);
     }
 
