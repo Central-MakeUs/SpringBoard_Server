@@ -90,16 +90,19 @@ public class ExecutionService {
     }
 
     //실행 재개
-    public void continueExecution(int userIdx) throws BaseException {
+    public void continueExecution(int userIdx, int executionIdx) throws BaseException {
 
-        Execution execution = executionProvider.getExecutionDetail(userIdx);
+        Execution execution = executionProvider.getExecutionDetail(executionIdx);
+
+        if (execution.getUserIdx() != userIdx)
+            throw new BaseException(EXECUTION_USER_NOT_MATCH);
 
         if(execution.getStatus()!=1)
             throw new BaseException(EXECUTION_PAUSE_NOT_EXIST);
 
         try{
 
-            int result = executionDao.continueExecution(userIdx);
+            int result = executionDao.continueExecution(executionIdx);
 
             if(result == 0)
                 throw new BaseException(REQUEST_FAIL);
@@ -110,9 +113,12 @@ public class ExecutionService {
     }
 
     //실행 완료
-    public void completeExecution(int userIdx, PatchExecutionReq patchExecutionReq) throws BaseException {
+    public void completeExecution(int userIdx, int executionIdx, PatchExecutionReq patchExecutionReq) throws BaseException {
 
-        Execution execution = executionProvider.getExecutionDetail(userIdx);
+        Execution execution = executionProvider.getExecutionDetail(executionIdx);
+
+        if (execution.getUserIdx() != userIdx)
+            throw new BaseException(EXECUTION_USER_NOT_MATCH);
 
         if(execution.getStatus()!=0 && execution.getStatus()!=1)
             throw new BaseException(EXECUTION_NOT_EXIST);
@@ -127,7 +133,7 @@ public class ExecutionService {
                 sec = 0;
             }
 
-            int result = executionDao.completeExecution(userIdx, min, sec);
+            int result = executionDao.completeExecution(executionIdx, min, sec);
 
             if(result == 0)
                 throw new BaseException(REQUEST_FAIL);
