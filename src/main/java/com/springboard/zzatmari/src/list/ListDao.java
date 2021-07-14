@@ -53,11 +53,11 @@ public class ListDao {
     //리스트 전체조회 (디지털디톡스, 자기계발)
     public List<GetListsRes> selectLists(int userIdx, int type){
         String selectListsQuery = "SELECT L.idx listIdx, L.listItem, ifnull(E.min, 0) time  FROM List L\n" +
-                "LEFT JOIN (SELECT listIdx, min\n" +
+                "LEFT JOIN (SELECT listIdx, TRUNCATE(SUM(min*60+sec)/60,0) min\n" +
                 "FROM Execution E JOIN User U on U.idx=E.userIdx\n" +
                 "WHERE E.createdAt >= CONCAT(DATE_FORMAT(CURDATE(),'%Y-%m-%d'),' ',TIME_FORMAT(CONCAT(U.dayStartHour, ':', U.dayStartMinute, ':00' ), '%H:%i:%S'))\n" +
                 "AND E.createdAt < CONCAT(DATE_FORMAT(CURDATE()+1,'%Y-%m-%d'),' ',TIME_FORMAT(CONCAT(U.dayStartHour, ':', U.dayStartMinute, ':00' ), '%H:%i:%S'))\n" +
-                ") E on L.idx=E.listIdx\n" +
+                "AND E.status=2 GROUP BY listIdx) E on L.idx=E.listIdx\n" +
                 "WHERE L.status=0 AND L.userIdx=? AND listType=?";
         Object[] selectListsParams = new Object[]{userIdx, type};
 
