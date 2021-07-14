@@ -88,10 +88,12 @@ public class ExecutionController {
      * @return BaseResponse<>
      */
     @ResponseBody
-    @PatchMapping("/pause")
-    public BaseResponse<String> pauseExecution(@RequestBody PatchExecutionReq patchExecutionReq) throws BaseException {
+    @PatchMapping("/{executionIdx}/pause")
+    public BaseResponse<String> pauseExecution(@RequestBody PatchExecutionReq patchExecutionReq, @PathVariable int executionIdx) throws BaseException {
 
         int userIdx = jwtService.getUserIdx();
+        if(executionIdx <= 0)
+            return new BaseResponse<>(EXECUTION_ID_EMPTY);
 
         //빈값체크
         if(patchExecutionReq.getMin() < 0)
@@ -101,7 +103,7 @@ public class ExecutionController {
             return new BaseResponse<>(EXECUTION_TIME_ERROR_TYPE);
 
         try{
-            executionService.pauseExecution(userIdx, patchExecutionReq);
+            executionService.pauseExecution(userIdx, executionIdx, patchExecutionReq);
             return new BaseResponse<String>("");
 
         } catch(BaseException exception){

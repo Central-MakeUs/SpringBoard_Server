@@ -80,9 +80,9 @@ public class ExecutionDao {
     }
 
     //실행 일시정지
-    public int pauseExecution(int userIdx, int min, int sec){
-        String pauseExecutionQuery = "UPDATE Execution SET status=1,min=?,sec=? WHERE userIdx=? AND status=0;";
-        Object[] pauseExecutionParams = new Object[]{min, sec, userIdx};
+    public int pauseExecution(int executionIdx, int min, int sec){
+        String pauseExecutionQuery = "UPDATE Execution SET status=1,min=?,sec=? WHERE idx=?;";
+        Object[] pauseExecutionParams = new Object[]{min, sec, executionIdx};
 
         return this.jdbcTemplate.update(pauseExecutionQuery, pauseExecutionParams);
     }

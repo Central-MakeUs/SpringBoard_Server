@@ -59,9 +59,12 @@ public class ExecutionService {
     }
 
     //실행 일시정지
-    public void pauseExecution(int userIdx, PatchExecutionReq patchExecutionReq) throws BaseException {
+    public void pauseExecution(int userIdx, int executionIdx, PatchExecutionReq patchExecutionReq) throws BaseException {
 
-        Execution execution = executionProvider.getExecutionDetail(userIdx);
+        Execution execution = executionProvider.getExecutionDetail(executionIdx);
+
+        if (execution.getUserIdx() != userIdx)
+            throw new BaseException(EXECUTION_USER_NOT_MATCH);
 
         if(execution.getStatus()!=0)
             throw new BaseException(EXECUTION_NOT_EXIST);
@@ -76,7 +79,7 @@ public class ExecutionService {
                 sec = 0;
             }
 
-            int result = executionDao.pauseExecution(userIdx, min, sec);
+            int result = executionDao.pauseExecution(executionIdx, min, sec);
 
             if(result == 0)
                 throw new BaseException(REQUEST_FAIL);
