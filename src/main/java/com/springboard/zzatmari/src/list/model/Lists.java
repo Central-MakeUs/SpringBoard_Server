@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class Lists {
+    private int listIdx;
     private int count;
     private int status;
     private int userIdx;

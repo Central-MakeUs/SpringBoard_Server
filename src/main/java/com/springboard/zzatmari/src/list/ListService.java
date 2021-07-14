@@ -34,21 +34,24 @@ public class ListService {
 
         //리스트 중복체크
         if(postListReq.getListItem() != null) {
+
             Lists list = listProvider.checkListItem(userIdx, postListReq.getListItem());
 
             //리스트 중복체크
             if(list.getCount() > 0){
+
                 if(list.getStatus()==0)
                     throw new BaseException(LISTS_EXIST_NAME);
-                if(list.getStatus()==1)
-                    throw new BaseException(LISTS_EXIST_NAME_DELETED);
+
+                //삭제된 상태면 살리기
+                listDao.updateListStatus(list.getListIdx());
+                return new PostListRes(list.getListIdx());
             }
         }
 
         try{
-
+            System.out.println("hoi");
             int listIdx = listDao.insertLists(postListReq, userIdx);
-
             return new PostListRes(listIdx);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

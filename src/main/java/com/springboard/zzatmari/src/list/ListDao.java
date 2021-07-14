@@ -44,11 +44,12 @@ public class ListDao {
 
     //리스트 아이템 중복체크
     public Lists checkListItem(int userIdx, String listItem){
-        String checkListItemQuery = "select count(*) count, ifnull(status, 0) status, ifnull(userIdx, 0) userIdx\n" +
-                "from (select status, userIdx from List where listItem=? and userIdx=?) L";
+        String checkListItemQuery = "select idx listIdx, count(*) count, ifnull(status, 0) status, ifnull(userIdx, 0) userIdx\n" +
+                "from (select idx, status, userIdx from List where listItem=? and userIdx=?) L";
         Object[] checkListItemParams = new Object[]{listItem, userIdx};
         return this.jdbcTemplate.queryForObject(checkListItemQuery,
                 (rs,rowNum)-> new Lists(
+                        rs.getInt("listIdx"),
                         rs.getInt("count"),
                         rs.getInt("status"),
                         rs.getInt("userIdx")) ,checkListItemParams);
@@ -56,11 +57,12 @@ public class ListDao {
 
     //리스트 존재여부
     public Lists checkListIdx(int listIdx){
-        String checkListIdxQuery = "select count(*) count, ifnull(status, 0) status, ifnull(userIdx, 0) userIdx\n" +
-                "from (select status, userIdx from List where idx=?) L";
+        String checkListIdxQuery = "select idx listIdx, count(*) count, ifnull(status, 0) status, ifnull(userIdx, 0) userIdx\n" +
+                "from (select idx, status, userIdx from List where idx=?) L";
         Object[] checkListIdxParams = new Object[]{listIdx};
         return this.jdbcTemplate.queryForObject(checkListIdxQuery,
                 (rs,rowNum)-> new Lists(
+                        rs.getInt("listIdx"),
                         rs.getInt("count"),
                         rs.getInt("status"),
                         rs.getInt("userIdx")),
@@ -94,7 +96,14 @@ public class ListDao {
 
         Object[] updateListParams = new Object[]{patchListReq.getListItem(), listIdx};
         return this.jdbcTemplate.update(updateListQuery, updateListParams);
+    }
 
+    //리스트 상태 살리기
+    public int updateListStatus(int listIdx){
+        String updateListStatusQuery = "UPDATE List SET status=0 WHERE idx=?";
+
+        Object[] updateListStatusParams = new Object[]{listIdx};
+        return this.jdbcTemplate.update(updateListStatusQuery, updateListStatusParams);
 
     }
 }
