@@ -24,7 +24,7 @@ public class ExecutionDao {
 
     //실행 추가
     public int insertExecution(int userIdx, int listIdx, int time){
-        String insertExecutionQuery = "INSERT INTO Execution(userIdx, listIdx, min) VALUES(?,?,?)";
+        String insertExecutionQuery = "INSERT INTO Execution(userIdx, listIdx, timer) VALUES(?,?,?)";
         Object[] insertExecutionParams = new Object[]{userIdx, listIdx, time};
         this.jdbcTemplate.update(insertExecutionQuery, insertExecutionParams);
 
