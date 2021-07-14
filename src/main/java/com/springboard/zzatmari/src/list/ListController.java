@@ -1,8 +1,6 @@
 package com.springboard.zzatmari.src.list;
 
-import com.springboard.zzatmari.src.list.model.GetListsRes;
-import com.springboard.zzatmari.src.list.model.PostListReq;
-import com.springboard.zzatmari.src.list.model.PostListRes;
+import com.springboard.zzatmari.src.list.model.*;
 import com.springboard.zzatmari.src.user.model.GetUserRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,6 +80,34 @@ public class ListController {
 
             List<GetListsRes> response = listProvider.getLists(userIdx, type);
             return new BaseResponse<>(response);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 리스트 수정 API
+     * [PATCH] /lists/:listIdx
+     * @return BaseResponse<PatchListRes>
+     */
+    @ResponseBody
+    @PatchMapping("/{listIdx}")
+    public BaseResponse<PatchListRes> updateLists(@RequestBody PatchListReq patchListReq, @PathVariable int listIdx) throws BaseException {
+
+        int userIdx = jwtService.getUserIdx();
+
+        //빈값 체크
+        if(patchListReq.getListItem() == null){
+            return new BaseResponse<>(LISTS_ITEM_EMPTY);
+        }
+        if(listIdx <= 0){
+            return new BaseResponse<>(LIST_ID_EMPTY);
+        }
+
+        try{
+            listService.modifyList(userIdx, listIdx, patchListReq);
+            PatchListRes patchListRes = new PatchListRes(listIdx);
+            return new BaseResponse<PatchListRes>(patchListRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }

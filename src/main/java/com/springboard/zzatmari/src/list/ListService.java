@@ -1,8 +1,7 @@
 package com.springboard.zzatmari.src.list;
 
 import com.springboard.zzatmari.config.BaseException;
-import com.springboard.zzatmari.src.list.model.PostListReq;
-import com.springboard.zzatmari.src.list.model.PostListRes;
+import com.springboard.zzatmari.src.list.model.*;
 import com.springboard.zzatmari.src.user.model.PostUserTimeReq;
 import com.springboard.zzatmari.utils.JwtService;
 import org.slf4j.Logger;
@@ -33,11 +32,20 @@ public class ListService {
     //리스트 등록
     public PostListRes createLists(PostListReq postListReq, int userIdx) throws BaseException {
 
-        try{
+        //리스트 중복체크
+        if(postListReq.getListItem() != null) {
+            Lists list = listProvider.checkListItem(userIdx, postListReq.getListItem());
+
             //리스트 중복체크
-            if(postListReq.getListItem() != null && listProvider.checkListItem(userIdx, postListReq.getListItem()) >= 1){
-                throw new BaseException(POST_LISTS_EXIST_NAME);
+            if(list.getCount() > 0){
+                if(list.getStatus()==0)
+                    throw new BaseException(LISTS_EXIST_NAME);
+                if(list.getStatus()==1)
+                    throw new BaseException(LISTS_EXIST_NAME_DELETED);
             }
+        }
+
+        try{
 
             int listIdx = listDao.insertLists(postListReq, userIdx);
 
@@ -47,5 +55,31 @@ public class ListService {
         }
     }
 
+    //리스트 수정
+    public void modifyList(int userIdx, int listIdx, PatchListReq patchListReq) throws BaseException {
+
+        //리스트 idx 체크
+        /*if(listProvider.checkListIdx(listIdx) == 0)
+            throw new BaseException(LIST_ID_NOT_EXIST);*/
+
+        Lists list = listProvider.checkListItem(userIdx, patchListReq.getListItem());
+        //리스트 중복체크
+        if(list.getUserIdx() != userIdx){
+            throw new BaseException(LIST_USER_NOT_MATCH);
+        }
+        if(list.getCount() > 0){
+            if(list.getStatus()==0)
+                throw new BaseException(LISTS_EXIST_NAME);
+            if(list.getStatus()==1)
+                throw new BaseException(LISTS_EXIST_NAME_DELETED);
+        }
+
+        try{
+            int result = listDao.updateList(listIdx, patchListReq);
+
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }
 

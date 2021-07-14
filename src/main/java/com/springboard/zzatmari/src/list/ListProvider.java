@@ -2,6 +2,7 @@ package com.springboard.zzatmari.src.list;
 
 import com.springboard.zzatmari.config.BaseException;
 import com.springboard.zzatmari.src.list.model.GetListsRes;
+import com.springboard.zzatmari.src.list.model.Lists;
 import com.springboard.zzatmari.src.user.model.GetUserRes;
 import com.springboard.zzatmari.utils.JwtService;
 import org.slf4j.Logger;
@@ -29,9 +30,18 @@ public class ListProvider {
     }
 
     //리스트 중복 체크
-    public int checkListItem(int userIdx, String listItem) throws BaseException {
+    public Lists checkListItem(int userIdx, String listItem) throws BaseException {
         try {
             return listDao.checkListItem(userIdx, listItem);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    //리스트 존재여부 체크
+    public int checkListIdx(int listIdx) throws BaseException {
+        try {
+            return listDao.checkListIdx(listIdx);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

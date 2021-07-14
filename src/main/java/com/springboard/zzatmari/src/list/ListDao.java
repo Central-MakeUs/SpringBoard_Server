@@ -2,6 +2,8 @@ package com.springboard.zzatmari.src.list;
 
 import com.springboard.zzatmari.src.goal.model.GetGoalsRes;
 import com.springboard.zzatmari.src.list.model.GetListsRes;
+import com.springboard.zzatmari.src.list.model.Lists;
+import com.springboard.zzatmari.src.list.model.PatchListReq;
 import com.springboard.zzatmari.src.list.model.PostListReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -41,13 +43,24 @@ public class ListDao {
     }
 
     //리스트 아이템 중복체크
-    public int checkListItem(int userIdx, String listItem){
-        String checkListItemQuery = "select exists(select listItem from List where listItem=? and userIdx=? and status=0)";
+    public Lists checkListItem(int userIdx, String listItem){
+        String checkListItemQuery = "select count(*) count, ifnull(status, 0) status, ifnull(userIdx, 0) userIdx\n" +
+                "from (select status, userIdx from List where listItem=? and userIdx=?) L";
         Object[] checkListItemParams = new Object[]{listItem, userIdx};
         return this.jdbcTemplate.queryForObject(checkListItemQuery,
-                int.class,
-                checkListItemParams);
+                (rs,rowNum)-> new Lists(
+                        rs.getInt("count"),
+                        rs.getInt("status"),
+                        rs.getInt("userIdx")) ,checkListItemParams);
+    }
 
+    //리스트 존재여부
+    public int checkListIdx(int listIdx){
+        String checkListIdxQuery = "select exists(select idx from List where idx=?)";
+        Object[] checkListIdxParams = new Object[]{listIdx};
+        return this.jdbcTemplate.queryForObject(checkListIdxQuery,
+                int.class,
+                checkListIdxParams);
     }
 
     //리스트 전체조회 (디지털디톡스, 자기계발)
@@ -69,5 +82,15 @@ public class ListDao {
         ),
                 selectListsParams
         );
+    }
+
+    //리스트 수정
+    public int updateList(int listIdx, PatchListReq patchListReq){
+        String updateListQuery = "UPDATE List SET listItem=? WHERE idx=?";
+
+        Object[] updateListParams = new Object[]{patchListReq.getListItem(), listIdx};
+        return this.jdbcTemplate.update(updateListQuery, updateListParams);
+
+
     }
 }

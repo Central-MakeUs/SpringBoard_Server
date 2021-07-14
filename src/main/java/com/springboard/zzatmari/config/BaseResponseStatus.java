@@ -28,7 +28,7 @@ public enum BaseResponseStatus {
     //lists
     LISTS_TYPE_ERROR_TYPE(false, 2020, "리스트 타입은 0 또는 1값을 입력해주세요"),
     LISTS_ITEM_EMPTY(false, 2021, "아이템을 1개 이상 입력해주세요"),
-    POST_LISTS_EXIST_NAME(false, 2022, "이미 존재하는 리스트 항목입니다"),
+    LIST_ID_EMPTY(false, 2024, "listIdx를 입력해주세요"),
 
     //timers
     TIMERS_TIME_EMPTY(false, 2030, "타이머 시간을 1분이상 입력해주세요"),
@@ -62,6 +62,12 @@ public enum BaseResponseStatus {
      */
     // Common
     RESPONSE_ERROR(false, 3000, "값을 불러오는데 실패하였습니다"),
+
+    //List
+    LISTS_EXIST_NAME(false, 3020, "이미 존재하는 리스트 항목입니다"),
+    LISTS_EXIST_NAME_DELETED(false, 3021, "같은 이름의 삭제된 항목이 있습니다"),
+    LIST_USER_NOT_MATCH(false, 3022, "해당 리스트의 사용자가 아닙니다"),
+    LIST_ID_NOT_EXIST(false, 3023, "존재하지 않는 listIdx 입니다"),
 
     //Execution
     EXECUTION_NOT_EXIST(false, 3050, "실행중인 타이머가 없습니다"),
