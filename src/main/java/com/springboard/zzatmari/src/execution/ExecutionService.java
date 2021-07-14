@@ -40,6 +40,11 @@ public class ExecutionService {
     //실행 시작
     public PostExecutionStartRes startExecution(int userIdx, PostExecutionStartReq postExecutionStartReq) throws BaseException {
 
+        //실행중인 타이머 확인
+        /*int isExist = executionDao.checkExecution(userIdx);
+        if(isExist == 1)
+            throw new BaseException(EXECUTION_IS_EXIST);*/
+
         //타이머 확인
         int time = timerProvider.getTimer(postExecutionStartReq.getTimerIdx());
 

@@ -31,16 +31,25 @@ public class ExecutionProvider {
     }
 
     //실행 조회
-    public GetExecutionRes getExecution(int userIdx) throws BaseException {
+    public GetExecutionRes getExecution(int userIdx, int executionIdx) throws BaseException {
 
-        int isExist = executionDao.checkExecution(userIdx);
+        Execution execution = executionDao.selectExecutionDetail(executionIdx);
 
-        if(isExist == 0){
+        if (execution.getUserIdx() != userIdx)
+            throw new BaseException(EXECUTION_USER_NOT_MATCH);
+
+        if (execution.getStatus() != 0 && execution.getStatus() != 1)
             throw new BaseException(EXECUTION_NOT_EXIST);
-        }
 
-        try{
-            return executionDao.selectExecution(userIdx);
+        try {
+
+            //실행중 상태
+            if (execution.getStatus() == 0)
+                return executionDao.selectExecution(executionIdx);
+
+            //일시정지 상태
+            return executionDao.selectPauseExecution(executionIdx);
+
 
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

@@ -32,13 +32,13 @@ public class ExecutionDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
     }
 
-    //실행 조회
-    public GetExecutionRes selectExecution(int userIdx){
+    //실행중 조회
+    public GetExecutionRes selectExecution(int executionIdx){
 
-        String selectExecutionQuery = "SELECT case when sec=0 then timer-min else timer-min-1 end min,\n" +
-                "case when sec=0 then 0 else 60-sec end sec, status\n" +
-                "FROM Execution WHERE userIdx=? AND (status=0 OR status=1)";
-        Object[] selectExecutionParams = new Object[]{userIdx};
+        String selectExecutionQuery = "SELECT GREATEST(TRUNCATE(executionTime/60,0),0) min, executionTime%60 sec, status\n" +
+                "FROM (SELECT (timer*60)-((min*60)+sec)-TIMESTAMPDIFF(SECOND, updatedAt, now()) executionTime, status\n" +
+                "FROM Execution WHERE idx=?) E";
+        Object[] selectExecutionParams = new Object[]{executionIdx};
 
         return this.jdbcTemplate.queryForObject(selectExecutionQuery,
                 (rs,rowNum)-> new GetExecutionRes(
@@ -49,6 +49,24 @@ public class ExecutionDao {
                     selectExecutionParams
             );
         }
+
+    //일시정지 조회
+    public GetExecutionRes selectPauseExecution(int executionIdx){
+
+        String selectExecutionQuery = "SELECT case when sec=0 then timer-min else timer-min-1 end min,\n" +
+                "case when sec=0 then 0 else 60-sec end sec, status\n" +
+                "FROM Execution WHERE idx=?";
+        Object[] selectExecutionParams = new Object[]{executionIdx};
+
+        return this.jdbcTemplate.queryForObject(selectExecutionQuery,
+                (rs,rowNum)-> new GetExecutionRes(
+                        rs.getInt("min"),
+                        rs.getInt("sec"),
+                        rs.getInt("status")
+                ),
+                selectExecutionParams
+        );
+    }
 
 
     //실행중 체크
@@ -86,18 +104,19 @@ public class ExecutionDao {
     }
 
     //실행 상세조회
-    public Execution selectExecutionDetail(int userIdx){
+    public Execution selectExecutionDetail(int executionIdx){
 
-        String selectExecutionDetailQuery = "SELECT min, sec, status, timer" +
-                " FROM Execution WHERE userIdx=? AND (status=0 OR status=1)";
-        Object[] selectExecutionDetailParams = new Object[]{userIdx};
+        String selectExecutionDetailQuery = "SELECT min, sec, status, timer, userIdx" +
+                " FROM Execution WHERE idx=?";
+        Object[] selectExecutionDetailParams = new Object[]{executionIdx};
 
         return this.jdbcTemplate.queryForObject(selectExecutionDetailQuery,
                 (rs,rowNum)-> new Execution(
                         rs.getInt("min"),
                         rs.getInt("sec"),
                         rs.getInt("status"),
-                        rs.getInt("timer")
+                        rs.getInt("timer"),
+                        rs.getInt("userIdx")
                 ),
                 selectExecutionDetailParams
         );

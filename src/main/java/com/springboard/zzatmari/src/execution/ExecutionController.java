@@ -62,17 +62,19 @@ public class ExecutionController {
 
     /**
      * 실행 조회 API
-     * [GET] /execution
+     * [GET] /execution/:executionIdx
      * @return BaseResponse<>
      */
     @ResponseBody
-    @GetMapping("")
-    public BaseResponse<GetExecutionRes> getExecution() throws BaseException {
+    @GetMapping("/{executionIdx}")
+    public BaseResponse<GetExecutionRes> getExecution(@PathVariable int executionIdx) throws BaseException {
 
         int userIdx = jwtService.getUserIdx();
+        if(executionIdx <= 0)
+            return new BaseResponse<>(EXECUTION_ID_EMPTY);
 
         try{
-            GetExecutionRes response = executionProvider.getExecution(userIdx);
+            GetExecutionRes response = executionProvider.getExecution(userIdx, executionIdx);
             return new BaseResponse<GetExecutionRes>(response);
 
         } catch(BaseException exception){

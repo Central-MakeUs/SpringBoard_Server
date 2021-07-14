@@ -12,4 +12,5 @@ public class Execution {
     private int sec;
     private int status;
     private int timer;
+    private int userIdx;
 }

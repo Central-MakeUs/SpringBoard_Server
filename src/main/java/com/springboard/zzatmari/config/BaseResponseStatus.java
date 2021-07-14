@@ -44,6 +44,7 @@ public enum BaseResponseStatus {
     EXECUTION_LIST_ID_EMPTY(false, 2050, "listIdx를 입력해주세요"),
     EXECUTION_TIMER_ID_EMPTY(false, 2051, "timerIdx를 입력해주세요"),
     EXECUTION_TIME_ERROR_TYPE(false, 2052, "남은 시간 형식을 확인해주세요"),
+    EXECUTION_ID_EMPTY(false, 2053, "executionIdx를 입력해주세요"),
 
 
     // sample
@@ -65,6 +66,8 @@ public enum BaseResponseStatus {
     //Execution
     EXECUTION_NOT_EXIST(false, 3050, "실행중인 타이머가 없습니다"),
     EXECUTION_PAUSE_NOT_EXIST(false, 3051, "일시정지 상태의 타이머가 없습니다"),
+    EXECUTION_USER_NOT_MATCH(false, 3052, "로그인된 사용자의 실행 idx가 아닙니다"),
+    EXECUTION_IS_EXIST(false, 3053, "종료되지 않은 타이머가 있습니다"),
 
     // [POST] /users
     DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다"),
