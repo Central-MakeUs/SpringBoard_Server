@@ -38,8 +38,8 @@ public class StatDao {
 
     public GetStatsListRes selectStatsList(int userIdx, String type, int year, int month, int day){
 
-        String selectStatsInfoQuery = "SELECT ifnull(TRUNCATE((digitalDetoxTime/(digitalDetoxTime+selfDevelopmentTime)*100),0),0) digitalDetoxPercent,\n" +
-                "       ifnull(TRUNCATE((selfDevelopmentTime/(digitalDetoxTime+selfDevelopmentTime)*100),0),0) selfDevelopmentPercent,\n" +
+        String selectStatsInfoQuery = "SELECT ifnull(ROUND((digitalDetoxTime/(digitalDetoxTime+selfDevelopmentTime)*100),0),0) digitalDetoxPercent,\n" +
+                "       ifnull(ROUND((selfDevelopmentTime/(digitalDetoxTime+selfDevelopmentTime)*100),0),0) selfDevelopmentPercent,\n" +
                 "       digitalDetoxTime,\n" +
                 "       selfDevelopmentTime,\n" +
                 "       0 continuousDay\n" +
@@ -48,19 +48,29 @@ public class StatDao {
                 "FROM Execution E\n" +
                 "    JOIN List L on L.idx=E.listIdx\n" +
                 "    JOIN User U on U.idx=L.userIdx\n" +
-                "    WHERE L.userIdx=? AND YEAR(executionDate)=? AND MONTH(executionDate)=? AND DAY(executionDate)=?) E";
+                "    WHERE L.userIdx=? AND YEAR(executionDate)=? AND MONTH(executionDate)=?";
+
+        if(type.equals("daily")){
+            selectStatsInfoQuery += " AND DAY(executionDate)=?) E";
+        }else{
+            selectStatsInfoQuery += " OR -1=?) E";
+        }
 
         String selectStatsListQuery = "SELECT E.listIdx, L.listItem, SUM(E.min) time\n" +
                 "FROM Execution E\n" +
                 "    JOIN List L on L.idx=E.listIdx\n" +
                 "    JOIN User U on U.idx=L.userIdx\n" +
-                "WHERE U.idx=? AND YEAR(executionDate)=? AND MONTH(executionDate)=? AND DAY(executionDate)=?\n" +
-                "AND L.listType=?\n" +
-                "GROUP BY L.idx";
+                "WHERE U.idx=? AND L.listType=? AND E.min>0 AND YEAR(executionDate)=? AND MONTH(executionDate)=?";
+
+        if(type.equals("daily")){
+            selectStatsListQuery += " AND DAY(executionDate)=? GROUP BY L.idx";
+        }else{
+            selectStatsListQuery += " OR -1=? GROUP BY L.idx";
+        }
 
         Object[] selectStatsParams = new Object[]{userIdx, year, month, day};
-        Object[] selectStatsListParams1 = new Object[]{userIdx, year, month, day, 0};
-        Object[] selectStatsListParams2 = new Object[]{userIdx, year, month, day, 1};
+        Object[] selectStatsListParams1 = new Object[]{userIdx, 0, year, month, day};
+        Object[] selectStatsListParams2 = new Object[]{userIdx, 1, year, month, day};
 
         //디지털디톡스 리스트
         List<GoalLists> result1 = this.jdbcTemplate.query(selectStatsListQuery,
