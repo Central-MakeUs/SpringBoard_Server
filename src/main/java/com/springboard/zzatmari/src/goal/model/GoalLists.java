@@ -1,4 +1,4 @@
-package com.springboard.zzatmari.src.list.model;
+package com.springboard.zzatmari.src.goal.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,9 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetListsRes {
+public class GoalLists {
     private int listIdx;
     private String listItem;
     private int time;
-    private int goalTime;
 }

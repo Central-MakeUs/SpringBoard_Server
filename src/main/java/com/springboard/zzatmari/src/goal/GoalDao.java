@@ -1,6 +1,7 @@
 package com.springboard.zzatmari.src.goal;
 
 import com.springboard.zzatmari.src.goal.model.GetGoalsRes;
+import com.springboard.zzatmari.src.goal.model.GoalLists;
 import com.springboard.zzatmari.src.goal.model.PostGoalReq;
 import com.springboard.zzatmari.src.list.model.GetListsRes;
 import com.springboard.zzatmari.src.user.model.PatchUserReq;
@@ -31,16 +32,16 @@ public class GoalDao {
         Object[] selectGoalsParams1 = new Object[]{userIdx, 0};
         Object[] selectGoalsParams2 = new Object[]{userIdx, 1};
 
-        List<GetListsRes> result1 = this.jdbcTemplate.query(selectGoalsQuery,
-                (rs,rowNum)-> new GetListsRes(
+        List<GoalLists> result1 = this.jdbcTemplate.query(selectGoalsQuery,
+                (rs,rowNum)-> new GoalLists(
                         rs.getInt("listIdx"),
                         rs.getString("listItem"),
                         rs.getInt("time")
                 ),selectGoalsParams1
         );
 
-        List<GetListsRes> result2 = this.jdbcTemplate.query(selectGoalsQuery,
-                (rs,rowNum)-> new GetListsRes(
+        List<GoalLists> result2 = this.jdbcTemplate.query(selectGoalsQuery,
+                (rs,rowNum)-> new GoalLists(
                         rs.getInt("listIdx"),
                         rs.getString("listItem"),
                         rs.getInt("time")

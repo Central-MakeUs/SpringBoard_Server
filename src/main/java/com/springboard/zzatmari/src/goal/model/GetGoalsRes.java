@@ -11,6 +11,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class GetGoalsRes {
-    private List<GetListsRes> digitalDetox;
-    private List<GetListsRes> selfDevelopment;
+    private List<GoalLists> digitalDetox;
+    private List<GoalLists> selfDevelopment;
 }
