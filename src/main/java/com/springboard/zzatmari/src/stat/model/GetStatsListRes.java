@@ -1,5 +1,6 @@
 package com.springboard.zzatmari.src.stat.model;
 
+import com.springboard.zzatmari.src.goal.model.GoalLists;
 import com.springboard.zzatmari.src.list.model.GetListsRes;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,10 +12,11 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class GetStatsListRes {
-    private int digitalDetoxChart;
-    private int selfDevelopmentChart;
+    private int digitalDetoxPercent;
+    private int selfDevelopmentPercent;
     private int digitalDetoxTime;
     private int selfDevelopmentTime;
-    private List<GetListsRes> digitalDetox;
-    private List<GetListsRes> selfDevelopment;
+    private int continuousDay;
+    private List<GoalLists> digitalDetox;
+    private List<GoalLists> selfDevelopment;
 }

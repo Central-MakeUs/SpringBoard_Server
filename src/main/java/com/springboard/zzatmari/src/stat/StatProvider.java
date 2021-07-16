@@ -1,6 +1,7 @@
 package com.springboard.zzatmari.src.stat;
 
 import com.springboard.zzatmari.config.BaseException;
+import com.springboard.zzatmari.src.stat.model.GetStatsListRes;
 import com.springboard.zzatmari.src.stat.model.GetStatsRes;
 import com.springboard.zzatmari.src.user.UserDao;
 import com.springboard.zzatmari.src.user.model.GetUserRes;
@@ -28,10 +29,20 @@ public class StatProvider {
         this.statDao = statDao;
         this.jwtService = jwtService;
     }
-
+    //통계 달력 조회
     public List<GetStatsRes> getStats(int userIdx, int year, int month) throws BaseException {
         try{
             return statDao.selectStats(userIdx, year, month);
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    //통계 리스트 조회
+    public GetStatsListRes getStatsList(int userIdx, String type, int year, int month, int day) throws BaseException {
+        try{
+            return statDao.selectStatsList(userIdx, type, year, month, day);
         }
         catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
