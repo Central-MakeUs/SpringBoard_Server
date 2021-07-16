@@ -80,6 +80,30 @@ public class ListService {
 
         try{
             int result = listDao.updateList(listIdx, patchListReq);
+            if(result != 1)
+                throw new BaseException(REQUEST_FAIL);
+
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    //리스트 삭제
+    public void deleteList(int userIdx, int listIdx) throws BaseException {
+
+        //리스트 idx 체크
+        Lists check = listProvider.checkListIdx(listIdx);
+        if(check.getCount() == 0)
+            throw new BaseException(LIST_ID_NOT_EXIST);
+        else if(check.getUserIdx() != userIdx)
+            throw new BaseException(LIST_USER_NOT_MATCH);
+        else if(check.getStatus() == 1)
+            throw new BaseException(LIST_STATUS_ERROR_TYPE);
+
+        try{
+            int result = listDao.deleteList(listIdx);
+            if(result != 1)
+                throw new BaseException(REQUEST_FAIL);
 
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

@@ -106,4 +106,13 @@ public class ListDao {
         return this.jdbcTemplate.update(updateListStatusQuery, updateListStatusParams);
 
     }
+
+    //리스트 상태 죽이기
+    public int deleteList(int listIdx){
+        String deleteListQuery = "UPDATE List SET status=1 WHERE idx=?";
+
+        Object[] deleteListParams = new Object[]{listIdx};
+        return this.jdbcTemplate.update(deleteListQuery, deleteListParams);
+
+    }
 }

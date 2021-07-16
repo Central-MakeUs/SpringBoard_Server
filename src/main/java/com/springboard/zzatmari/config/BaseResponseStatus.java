@@ -68,6 +68,7 @@ public enum BaseResponseStatus {
     LISTS_EXIST_NAME_DELETED(false, 3021, "같은 이름의 삭제된 항목이 있습니다"),
     LIST_USER_NOT_MATCH(false, 3022, "해당 리스트의 사용자가 아닙니다"),
     LIST_ID_NOT_EXIST(false, 3023, "존재하지 않는 listIdx 입니다"),
+    LIST_STATUS_ERROR_TYPE(false, 3024, "이미 삭제된 리스트입니다"),
 
     //Execution
     EXECUTION_NOT_EXIST(false, 3050, "실행중인 타이머가 없습니다"),

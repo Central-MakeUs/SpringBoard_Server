@@ -113,5 +113,30 @@ public class ListController {
         }
     }
 
+    /**
+     * 리스트 삭제 API
+     * [PATCH] /lists/:listIdx/status
+     * @return BaseResponse<PatchListRes>
+     */
+    @ResponseBody
+    @PatchMapping("/{listIdx}/status")
+    public BaseResponse<PatchListRes> deleteLists(@PathVariable int listIdx) throws BaseException {
+
+        int userIdx = jwtService.getUserIdx();
+
+        //빈값 체크
+        if(listIdx <= 0){
+            return new BaseResponse<>(LIST_ID_EMPTY);
+        }
+
+        try{
+            listService.deleteList(userIdx, listIdx);
+            PatchListRes patchListRes = new PatchListRes(listIdx);
+            return new BaseResponse<PatchListRes>(patchListRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 }
 

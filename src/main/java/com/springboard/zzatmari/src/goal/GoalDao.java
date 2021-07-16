@@ -27,7 +27,7 @@ public class GoalDao {
 
         String selectGoalsQuery = "SELECT L.idx listIdx, L.listItem, IFNULL(G.goalTime,0) time\n" +
                 "FROM  List L LEFT JOIN Goal G ON G.listIdx=L.idx\n" +
-                "WHERE L.userIdx=? AND listType=?";
+                "WHERE L.userIdx=? AND listType=? AND L.status=0";
         Object[] selectGoalsParams1 = new Object[]{userIdx, 0};
         Object[] selectGoalsParams2 = new Object[]{userIdx, 1};
 
