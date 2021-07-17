@@ -49,4 +49,24 @@ public class SeedProvider {
         }
     }
 
+    //씨앗 가격 조회
+    public int getSeedSunlight(int seedIdx) throws BaseException {
+        try {
+            return seedDao.selectSeedSunlight(seedIdx);
+
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    //사용자 햇살 조회
+    public int getUserSunlight(int userIdx) throws BaseException {
+        try {
+            return seedDao.selectUserSunlight(userIdx);
+
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 }

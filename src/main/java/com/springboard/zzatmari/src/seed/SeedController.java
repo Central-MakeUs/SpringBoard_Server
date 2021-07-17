@@ -4,6 +4,8 @@ import com.springboard.zzatmari.config.BaseException;
 import com.springboard.zzatmari.config.BaseResponse;
 import com.springboard.zzatmari.src.seed.model.GetSeedDetailRes;
 import com.springboard.zzatmari.src.seed.model.GetSeedsRes;
+import com.springboard.zzatmari.src.seed.model.PostSeedReq;
+import com.springboard.zzatmari.src.seed.model.PostSeedRes;
 import com.springboard.zzatmari.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +72,29 @@ public class SeedController {
 
             GetSeedsRes response = seedProvider.getSeeds(userIdx);
             return new BaseResponse<>(response);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 씨앗구매
+     * [GET] /seeds
+     * @return BaseResponse<PostSeedRes>
+     */
+    @ResponseBody
+    @PostMapping("")
+    public BaseResponse<PostSeedRes> purchaseSeed(@RequestBody PostSeedReq postSeedReq) {
+
+        try{
+            int userIdx = jwtService.getUserIdx();
+
+            if(postSeedReq.getSeedIdx() <= 0)
+                return new BaseResponse<>(SEEDS_ID_EMPTY);
+
+            seedService.purchaseSeed(userIdx,postSeedReq.getSeedIdx());
+            PostSeedRes postSeedRes = new PostSeedRes(postSeedReq.getSeedIdx());
+            return new BaseResponse<>(postSeedRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }

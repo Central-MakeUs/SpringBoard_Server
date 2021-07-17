@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -97,5 +98,45 @@ public class SeedDao {
                 ),
                 selectSeedsParams
         );
+    }
+
+    //씨앗구매 - 사용자 보유씨앗 추가
+    public int insertUserSeed(int userIdx, int seedIdx){
+        String insertUserSeedQuery = "INSERT INTO UserSeed(userIdx, seedIdx) VALUES(?,?)";
+
+        Object[] insertUserSeedParams = new Object[]{userIdx, seedIdx};
+
+        return this.jdbcTemplate.update(insertUserSeedQuery, insertUserSeedParams);
+
+    }
+
+    //씨앗구매 - 사용자 햇살 사용
+    public int updateUserSunlight(int userIdx, int sunlight){
+        String updateUserSunlightQuery = "UPDATE User SET sunlight=? WHERE idx=?";
+
+        Object[] updateUserSunlightParams = new Object[]{sunlight, userIdx};
+
+        return this.jdbcTemplate.update(updateUserSunlightQuery, updateUserSunlightParams);
+
+    }
+
+    //씨앗가격 조회
+    public int selectSeedSunlight(int seedIdx){
+        String selectSeedSunlightQuery = "SELECT needSunlight sunlight FROM SeedInfo S WHERE S.idx=?";
+
+        Object[] selectSeedSunlightParams = new Object[]{seedIdx};
+
+        return this.jdbcTemplate.queryForObject(selectSeedSunlightQuery, int.class, selectSeedSunlightParams);
+
+    }
+
+    //사용자 햇살 조회
+    public int selectUserSunlight(int userIdx){
+        String selectUserSunlightQuery = "SELECT U.sunlight FROM User U WHERE U.idx=?";
+
+        Object[] selectUserSunlightParams = new Object[]{userIdx};
+
+        return this.jdbcTemplate.queryForObject(selectUserSunlightQuery, int.class, selectUserSunlightParams);
+
     }
 }
