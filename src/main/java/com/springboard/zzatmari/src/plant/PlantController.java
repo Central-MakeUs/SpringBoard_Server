@@ -45,7 +45,7 @@ public class PlantController {
 
             //빈값 체크
             if(patchPlantReq.getSeedIdx() <= 0){
-                return new BaseResponse<>(USER_SEED_ID_EMPTY);
+                return new BaseResponse<>(SEEDS_ID_EMPTY);
             }
 
             plantService.plantSeed(userIdx, patchPlantReq.getSeedIdx());
