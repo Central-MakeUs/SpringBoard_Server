@@ -24,12 +24,10 @@ public class SeedDao {
 
     //씨앗정보 조회
     public GetSeedDetailRes selectSeedDetail(int userIdx, int seedIdx, int type){
-        String selectSeedDetailQuery = "SELECT U.sunlight mySunlight FROM User U WHERE idx=?";
 
         //SeedInfo idx반환
         String selectSeedListQuery;
 
-        Object[] selectSeedDetailParams = new Object[]{userIdx};
         Object[] selectSeedListParams = new Object[]{seedIdx, userIdx, seedIdx};
 
         //씨앗상점에서 조회
@@ -50,8 +48,8 @@ public class SeedDao {
                     "WHERE S.idx=?";
         }
 
-        List<Seed> seedList = this.jdbcTemplate.query(selectSeedListQuery,
-                (rs,rowNum)-> new Seed(
+        return this.jdbcTemplate.queryForObject(selectSeedListQuery,
+                (rs,rowNum)-> new GetSeedDetailRes(
                         rs.getInt("seedIdx"),
                         rs.getString("seedName"),
                         rs.getString("seedImgUrl"),
@@ -61,14 +59,6 @@ public class SeedDao {
                         rs.getInt("reward"),
                         rs.getInt("quantity")),
                 selectSeedListParams
-        );
-
-        return this.jdbcTemplate.queryForObject(selectSeedDetailQuery,
-                (rs,rowNum)-> new GetSeedDetailRes(
-                        rs.getInt("mySunlight"),
-                        seedList
-                ),
-                selectSeedDetailParams
         );
     }
 

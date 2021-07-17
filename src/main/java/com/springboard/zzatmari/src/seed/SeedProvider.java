@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static com.springboard.zzatmari.config.BaseResponseStatus.DATABASE_ERROR;
 
 @Service
@@ -30,8 +32,7 @@ public class SeedProvider {
     public GetSeedDetailRes getSeedDetail(int userIdx, int seedIdx, int type) throws BaseException {
         try {
 
-            GetSeedDetailRes response = seedDao.selectSeedDetail(userIdx, seedIdx, type);
-            return response;
+            return seedDao.selectSeedDetail(userIdx, seedIdx, type);
 
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
