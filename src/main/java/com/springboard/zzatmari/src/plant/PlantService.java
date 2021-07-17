@@ -29,12 +29,12 @@ public class PlantService {
     }
 
     //씨앗심기
-    public void plantSeed(int userIdx, int userSeedIdx) throws BaseException {
+    public void plantSeed(int userIdx, int userSeedIdx, int status) throws BaseException {
 
         //TODO:UserSeed 확인
 
         try{
-            int result = plantDao.updateUserSeedStatus(userIdx, userSeedIdx);
+            int result = plantDao.updateUserSeedStatus(userIdx, userSeedIdx, status);
 
             if(result != 1)
                 throw new BaseException(REQUEST_FAIL);

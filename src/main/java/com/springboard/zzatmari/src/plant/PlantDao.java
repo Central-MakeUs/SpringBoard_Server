@@ -20,10 +20,10 @@ public class PlantDao {
     }
 
     //씨앗심기
-    public int updateUserSeedStatus(int userIdx, int userSeedIdx){
-        String updateUserSeedStatusQuery = "UPDATE UserSeed SET status=1 WHERE userIdx=? AND idx=?;";
+    public int updateUserSeedStatus(int userIdx, int userSeedIdx, int status){
+        String updateUserSeedStatusQuery = "UPDATE UserSeed SET status=? WHERE userIdx=? AND idx=?;";
 
-        Object[] updateUserSeedStatusParams = new Object[]{userIdx, userSeedIdx};
+        Object[] updateUserSeedStatusParams = new Object[]{status, userIdx, userSeedIdx};
         return this.jdbcTemplate.update(updateUserSeedStatusQuery, updateUserSeedStatusParams);
     }
 

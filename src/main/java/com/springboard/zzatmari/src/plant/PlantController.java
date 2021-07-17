@@ -49,7 +49,15 @@ public class PlantController {
                 return new BaseResponse<>(SEEDS_ID_EMPTY);
             }
 
-            plantService.plantSeed(userIdx, patchPlantReq.getSeedIdx());
+            int status = 0;
+            if(patchPlantReq.getType() == 0)
+                status = 1;
+            else if(patchPlantReq.getType() == 1)
+                status = 2;
+            else
+                return new BaseResponse<>(SEEDS_TYPE_ERROR_TYPE);
+
+            plantService.plantSeed(userIdx, patchPlantReq.getSeedIdx(), status);
             PatchPlantRes patchPlantRes = new PatchPlantRes(patchPlantReq.getSeedIdx());
             return new BaseResponse<PatchPlantRes>(patchPlantRes);
         } catch(BaseException exception){
