@@ -53,6 +53,9 @@ public enum BaseResponseStatus {
     STATS_DAY_ERROR_TYPE(false, 2062, "day는 1~31로 입력해주세요"),
     STATS_TYPE_ERROR_TYPE(false, 2063, "통계 타입은 daily, monthly로 입력해주세요"),
 
+    //seeds
+    SEEDS_ID_EMPTY(false, 2070, "seedIdx를 입력해주세요"),
+
     // sample
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요"),
 
