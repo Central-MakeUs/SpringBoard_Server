@@ -31,6 +31,8 @@ public class PlantService {
     //씨앗심기
     public void plantSeed(int userIdx, int userSeedIdx) throws BaseException {
 
+        //TODO:UserSeed 확인
+
         try{
             int result = plantDao.updateUserSeedStatus(userIdx, userSeedIdx);
 

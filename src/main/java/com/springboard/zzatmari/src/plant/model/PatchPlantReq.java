@@ -8,5 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PatchPlantReq {
-    private int userSeedIdx;
+    private int userIdx;
+    private int seedIdx;
 }

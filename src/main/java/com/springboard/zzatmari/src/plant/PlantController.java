@@ -44,12 +44,12 @@ public class PlantController {
             int userIdx = jwtService.getUserIdx();
 
             //빈값 체크
-            if(patchPlantReq.getUserSeedIdx() <= 0){
+            if(patchPlantReq.getSeedIdx() <= 0){
                 return new BaseResponse<>(USER_SEED_ID_EMPTY);
             }
 
-            plantService.plantSeed(userIdx, patchPlantReq.getUserSeedIdx());
-            PatchPlantRes patchPlantRes = new PatchPlantRes(patchPlantReq.getUserSeedIdx());
+            plantService.plantSeed(userIdx, patchPlantReq.getSeedIdx());
+            PatchPlantRes patchPlantRes = new PatchPlantRes(patchPlantReq.getSeedIdx());
             return new BaseResponse<PatchPlantRes>(patchPlantRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
