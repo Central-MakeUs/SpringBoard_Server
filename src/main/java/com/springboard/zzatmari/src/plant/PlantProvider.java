@@ -3,6 +3,7 @@ package com.springboard.zzatmari.src.plant;
 import com.springboard.zzatmari.config.BaseException;
 import com.springboard.zzatmari.src.plant.PlantDao;
 import com.springboard.zzatmari.src.plant.model.GetPlantRes;
+import com.springboard.zzatmari.src.plant.model.GetPlantsRes;
 import com.springboard.zzatmari.src.plant.model.Plant;
 import com.springboard.zzatmari.src.user.model.GetUserSeedRes;
 import com.springboard.zzatmari.utils.JwtService;
@@ -47,11 +48,22 @@ public class PlantProvider {
         }
     }
 
-    //키우고있는 식물 조회
+    //식물 상태체크
     public Plant checkPlant(int plantIdx) throws BaseException {
 
         try{
             return plantDao.checkPlant(plantIdx);
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    //키운 식물 조회
+    public List<GetPlantsRes> getPlants(int userIdx) throws BaseException {
+
+        try{
+            return plantDao.selectPlants(userIdx);
         }
         catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

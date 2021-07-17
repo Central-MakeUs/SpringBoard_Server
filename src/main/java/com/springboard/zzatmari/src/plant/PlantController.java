@@ -3,6 +3,7 @@ package com.springboard.zzatmari.src.plant;
 import com.springboard.zzatmari.config.BaseException;
 import com.springboard.zzatmari.config.BaseResponse;
 import com.springboard.zzatmari.src.plant.model.GetPlantRes;
+import com.springboard.zzatmari.src.plant.model.GetPlantsRes;
 import com.springboard.zzatmari.src.plant.model.PatchPlantReq;
 import com.springboard.zzatmari.src.plant.model.PatchPlantRes;
 import com.springboard.zzatmari.src.timer.model.PostTimerRes;
@@ -11,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.springboard.zzatmari.config.BaseResponseStatus.*;
 
@@ -84,6 +87,25 @@ public class PlantController {
 
             GetPlantRes getPlantRes = plantProvider.getPlant(plantIdx);
             return new BaseResponse<GetPlantRes>(getPlantRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 키운 식물 조회
+     * [GET] /plants
+     * @return BaseResponse<GetPlantsRes>
+     */
+    @ResponseBody
+    @GetMapping("")
+    public BaseResponse<List<GetPlantsRes>> getPlants() {
+
+        try{
+            int userIdx = jwtService.getUserIdx();
+
+            List<GetPlantsRes> getPlantsRes = plantProvider.getPlants(userIdx);
+            return new BaseResponse<List<GetPlantsRes>> (getPlantsRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }

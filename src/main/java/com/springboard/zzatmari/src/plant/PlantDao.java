@@ -1,6 +1,7 @@
 package com.springboard.zzatmari.src.plant;
 
 import com.springboard.zzatmari.src.plant.model.GetPlantRes;
+import com.springboard.zzatmari.src.plant.model.GetPlantsRes;
 import com.springboard.zzatmari.src.plant.model.Plant;
 import com.springboard.zzatmari.src.user.model.GetUserSeedRes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,5 +87,21 @@ public class PlantDao {
         );
 
         return getPlantRes;
+    }
+
+    //키운씨앗 조회
+    public List<GetPlantsRes> selectPlants(int userIdx){
+        String selectPlantsQuery = "SELECT plantImgUrl\n" +
+                "FROM UserSeed US\n" +
+                "JOIN PlantImg PI on US.seedIdx=PI.seedIdx\n" +
+                "JOIN SeedInfo S on S.idx=US.seedIdx\n" +
+                "WHERE US.status=2 AND S.growthStage=PI.stage AND US.userIdx=?";
+        int selectPlantsParams = userIdx;
+
+
+         return this.jdbcTemplate.query(selectPlantsQuery,
+                (rs,rowNum) -> new GetPlantsRes(
+                        rs.getString("plantImgUrl")), selectPlantsParams
+        );
     }
 }
