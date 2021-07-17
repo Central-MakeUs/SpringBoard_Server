@@ -3,6 +3,7 @@ package com.springboard.zzatmari.src.seed;
 import com.springboard.zzatmari.config.BaseException;
 import com.springboard.zzatmari.config.BaseResponse;
 import com.springboard.zzatmari.src.seed.model.GetSeedDetailRes;
+import com.springboard.zzatmari.src.seed.model.GetSeedsRes;
 import com.springboard.zzatmari.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,24 @@ public class SeedController {
                 return new BaseResponse<>(SEEDS_TYPE_ERROR_TYPE);
 
             GetSeedDetailRes response = seedProvider.getSeedDetail(userIdx, seedIdx, t);
+            return new BaseResponse<>(response);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 씨앗상점 조회
+     * [GET] /seeds
+     * @return BaseResponse<GetSeedsRes>
+     */
+    @ResponseBody
+    @GetMapping("")
+    public BaseResponse<GetSeedsRes> getSeeds() {
+        try{
+            int userIdx = jwtService.getUserIdx();
+
+            GetSeedsRes response = seedProvider.getSeeds(userIdx);
             return new BaseResponse<>(response);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));

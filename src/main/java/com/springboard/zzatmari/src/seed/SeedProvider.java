@@ -2,6 +2,7 @@ package com.springboard.zzatmari.src.seed;
 
 import com.springboard.zzatmari.config.BaseException;
 import com.springboard.zzatmari.src.seed.model.GetSeedDetailRes;
+import com.springboard.zzatmari.src.seed.model.GetSeedsRes;
 import com.springboard.zzatmari.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,17 @@ public class SeedProvider {
 
             GetSeedDetailRes response = seedDao.selectSeedDetail(userIdx, seedIdx, type);
             return response;
+
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    //씨앗상점 조회
+    public GetSeedsRes getSeeds(int userIdx) throws BaseException {
+        try {
+
+            return seedDao.selectSeeds(userIdx);
 
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

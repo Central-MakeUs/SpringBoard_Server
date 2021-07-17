@@ -1,7 +1,9 @@
 package com.springboard.zzatmari.src.seed;
 
 import com.springboard.zzatmari.src.seed.model.GetSeedDetailRes;
+import com.springboard.zzatmari.src.seed.model.GetSeedsRes;
 import com.springboard.zzatmari.src.seed.model.Seed;
+import com.springboard.zzatmari.src.seed.model.SeedStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -66,6 +68,34 @@ public class SeedDao {
                         seedList
                 ),
                 selectSeedDetailParams
+        );
+    }
+
+    //씨앗상점 조회
+    public GetSeedsRes selectSeeds(int userIdx){
+        String selectSeedsQuery = "SELECT U.sunlight mySunlight FROM User U WHERE idx=?";
+        String selectSeedListQuery = "SELECT idx seedIdx, seedName, seedImgUrl, needSunlight sunlight\n" +
+                "FROM SeedInfo\n" +
+                "WHERE status=0\n" +
+                "ORDER BY needSunlight";
+
+        int selectSeedsParams = userIdx;
+
+
+        List<SeedStore> seedList = this.jdbcTemplate.query(selectSeedListQuery,
+                (rs,rowNum)-> new SeedStore(
+                        rs.getInt("seedIdx"),
+                        rs.getString("seedName"),
+                        rs.getString("seedImgUrl"),
+                        rs.getInt("sunlight"))
+        );
+
+        return this.jdbcTemplate.queryForObject(selectSeedsQuery,
+                (rs,rowNum)-> new GetSeedsRes(
+                        rs.getInt("mySunlight"),
+                        seedList
+                ),
+                selectSeedsParams
         );
     }
 }
