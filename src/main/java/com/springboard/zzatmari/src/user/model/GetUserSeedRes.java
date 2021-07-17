@@ -11,5 +11,4 @@ public class GetUserSeedRes {
     private int seedIdx;
     private String seedName;
     private String seedImgUrl;
-    private int quantity;
 }
