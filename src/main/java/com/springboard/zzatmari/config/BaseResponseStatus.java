@@ -59,6 +59,9 @@ public enum BaseResponseStatus {
 
     //plant
     PLANTS_ID_EMPTY(false, 2080, "plantIdx를 입력해주세요"),
+    PLANTS_CANT_PLANT(false, 2081, "심을 수 없는 씨앗입니다"),
+    PLANTS_CANT_HARVEST(false, 2082, "수확할 수 없는 씨앗입니다"),
+    PLANTS_NOT_EXIST(false, 2083, "보유하지 않은 씨앗입니다"),
 
     // sample
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요"),

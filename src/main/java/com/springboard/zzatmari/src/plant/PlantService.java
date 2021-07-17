@@ -3,6 +3,7 @@ package com.springboard.zzatmari.src.plant;
 import com.springboard.zzatmari.config.BaseException;
 import com.springboard.zzatmari.src.plant.PlantDao;
 import com.springboard.zzatmari.src.plant.PlantProvider;
+import com.springboard.zzatmari.src.plant.model.Plant;
 import com.springboard.zzatmari.src.user.model.PostUserTimeReq;
 import com.springboard.zzatmari.utils.JwtService;
 import org.slf4j.Logger;
@@ -31,7 +32,20 @@ public class PlantService {
     //씨앗심기
     public void plantSeed(int userIdx, int userSeedIdx, int status) throws BaseException {
 
-        //TODO:UserSeed 확인
+        Plant plant = plantDao.checkPlant(userSeedIdx);
+
+        if(plant.getCount() == 0)
+            throw new BaseException(PLANTS_NOT_EXIST);
+        else{
+            //심을수 없는 경우
+            System.out.println(plant.getStatus());
+            if(status == 1 && plant.getStatus() != 0)
+                throw new BaseException(PLANTS_CANT_PLANT);
+
+            //수확할 수 없는 경우
+            if(status == 2 && plant.getStatus() != 1)
+                throw new BaseException(PLANTS_CANT_HARVEST);
+        }
 
         try{
             int result = plantDao.updateUserSeedStatus(userIdx, userSeedIdx, status);

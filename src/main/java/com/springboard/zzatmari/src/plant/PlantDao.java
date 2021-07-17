@@ -1,6 +1,7 @@
 package com.springboard.zzatmari.src.plant;
 
 import com.springboard.zzatmari.src.plant.model.GetPlantRes;
+import com.springboard.zzatmari.src.plant.model.Plant;
 import com.springboard.zzatmari.src.user.model.GetUserSeedRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -67,6 +68,22 @@ public class PlantDao {
             );
             getPlantRes.setPlantImgUrl(getPlantImgRes);
         }
+
+        return getPlantRes;
+    }
+
+    //씨앗 상태확인
+    public Plant checkPlant(int plantIdx){
+        String checkPlantQuery = "SELECT count(*) count, ifnull(idx,0) plantIdx, ifnull(status,0) status FROM UserSeed WHERE idx=?";
+        int checkPlantParams = plantIdx;
+
+
+        Plant getPlantRes = this.jdbcTemplate.queryForObject(checkPlantQuery,
+                (rs,rowNum) -> new Plant(
+                        rs.getInt("count"),
+                        rs.getInt("plantIdx"),
+                        rs.getInt("status")), checkPlantParams
+        );
 
         return getPlantRes;
     }
