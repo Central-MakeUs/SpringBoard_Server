@@ -2,6 +2,7 @@ package com.springboard.zzatmari.src.plant;
 
 import com.springboard.zzatmari.config.BaseException;
 import com.springboard.zzatmari.config.BaseResponse;
+import com.springboard.zzatmari.src.plant.model.GetPlantRes;
 import com.springboard.zzatmari.src.plant.model.PatchPlantReq;
 import com.springboard.zzatmari.src.plant.model.PatchPlantRes;
 import com.springboard.zzatmari.src.timer.model.PostTimerRes;
@@ -51,6 +52,30 @@ public class PlantController {
             plantService.plantSeed(userIdx, patchPlantReq.getSeedIdx());
             PatchPlantRes patchPlantRes = new PatchPlantRes(patchPlantReq.getSeedIdx());
             return new BaseResponse<PatchPlantRes>(patchPlantRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 키우고있는 식물 조회
+     * [GET] /plants/:plantIdx
+     * @return BaseResponse<GetPlantRes>
+     */
+    @ResponseBody
+    @GetMapping("{plantIdx}")
+    public BaseResponse<GetPlantRes> getPlant(@PathVariable int plantIdx) {
+
+        try{
+            int userIdx = jwtService.getUserIdx();
+
+            //빈값 체크
+            if(plantIdx <= 0){
+                return new BaseResponse<>(PLANTS_ID_EMPTY);
+            }
+
+            GetPlantRes getPlantRes = plantProvider.getPlant(plantIdx);
+            return new BaseResponse<GetPlantRes>(getPlantRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }

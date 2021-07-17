@@ -57,7 +57,7 @@ public enum BaseResponseStatus {
     SEEDS_ID_EMPTY(false, 2070, "seedIdx를 입력해주세요"),
 
     //plant
-    USER_SEED_ID_EMPTY(false, 2080, "userSeedIdx를 입력해주세요"),
+    PLANTS_ID_EMPTY(false, 2080, "plantIdx를 입력해주세요"),
 
     // sample
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요"),
