@@ -24,6 +24,7 @@ public enum BaseResponseStatus {
 
     // users
     USERS_TIME_INVALID(false, 2010, "시간단위를 확인해주세요"),
+    USERS_ID_EMPTY(false, 2011, "userIdx를 입력해주세요"),
 
     //lists
     LISTS_TYPE_ERROR_TYPE(false, 2020, "리스트 타입은 0 또는 1값을 입력해주세요"),

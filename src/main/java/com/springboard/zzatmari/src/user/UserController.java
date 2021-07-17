@@ -84,6 +84,28 @@ public class UserController {
     }
 
     /**
+     *
+     * [GET] /users/:userIdx/seed
+     * 씨앗창고 조회
+     * @return BaseResponse<List<GetUserSeedRes>>
+     */
+    //Query String
+    @ResponseBody
+    @GetMapping("/{userIdx}/seed") // (GET) 127.0.0.1:9000/app/users
+    public BaseResponse<List<GetUserSeedRes>> getUserSeeds(@PathVariable int userIdx) {
+        try{
+            if(userIdx <= 0){
+                return new BaseResponse<>(USERS_ID_EMPTY);
+            }
+            // Get Users
+            List<GetUserSeedRes> getUsersRes = userProvider.getUserSeeds(userIdx);
+            return new BaseResponse<>(getUsersRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
      * 회원 조회 API
      * [GET] /users
      * 회원 번호 및 이메일 검색 조회 API

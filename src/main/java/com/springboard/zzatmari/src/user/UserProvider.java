@@ -3,12 +3,9 @@ package com.springboard.zzatmari.src.user;
 
 import com.springboard.zzatmari.config.BaseException;
 import com.springboard.zzatmari.config.secret.Secret;
-import com.springboard.zzatmari.src.user.model.PostLoginReq;
+import com.springboard.zzatmari.src.user.model.*;
 import com.springboard.zzatmari.utils.AES128;
 import com.springboard.zzatmari.utils.JwtService;
-import com.springboard.zzatmari.src.user.model.GetUserRes;
-import com.springboard.zzatmari.src.user.model.PostLoginRes;
-import com.springboard.zzatmari.src.user.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +29,17 @@ public class UserProvider {
     public UserProvider(UserDao userDao, JwtService jwtService) {
         this.userDao = userDao;
         this.jwtService = jwtService;
+    }
+
+    //씨앗창고 조회
+    public List<GetUserSeedRes> getUserSeeds(int userIdx) throws BaseException{
+        try{
+            List<GetUserSeedRes> getUserSeedRes = userDao.selectUserSeeds(userIdx);
+            return getUserSeedRes;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
     public List<GetUserRes> getUsers() throws BaseException{
