@@ -20,18 +20,32 @@ public class SeedDao {
     }
 
     //씨앗정보 조회
-    public GetSeedDetailRes selectSeedDetail(int userIdx, int seedIdx){
+    public GetSeedDetailRes selectSeedDetail(int userIdx, int seedIdx, int type){
         String selectSeedDetailQuery = "SELECT U.sunlight mySunlight FROM User U WHERE idx=?";
 
-        String selectSeedListQuery = "SELECT S.idx seedIdx, seedName, seedImgUrl,\n" +
-                "       needSunlight sunlight, floweringTime,\n" +
-                "       growthTime, rewardSunlight reward, quantity\n" +
-                "FROM SeedInfo S\n" +
-                "JOIN (SELECT count(*) quantity FROM UserSeed WHERE seedIdx=? AND userIdx=?) US\n" +
-                "WHERE S.idx=?";
+        //SeedInfo idx반환
+        String selectSeedListQuery;
 
         Object[] selectSeedDetailParams = new Object[]{userIdx};
         Object[] selectSeedListParams = new Object[]{seedIdx, userIdx, seedIdx};
+
+        //씨앗상점에서 조회
+        if(type==1){
+            selectSeedListQuery = "SELECT S.idx seedIdx, seedName, seedImgUrl,\n" +
+                    "       needSunlight sunlight, floweringTime,\n" +
+                    "       growthTime, rewardSunlight reward, quantity\n" +
+                    "FROM SeedInfo S\n" +
+                    "JOIN (SELECT count(*) quantity FROM UserSeed WHERE seedIdx=? AND userIdx=?) US\n" +
+                    "WHERE S.idx=?";
+        }
+        else{ //씨앗창고에서 조회
+            selectSeedListQuery = "SELECT US.idx seedIdx, seedName, seedImgUrl,\n" +
+                    "       needSunlight sunlight, floweringTime,\n" +
+                    "       growthTime, rewardSunlight reward, quantity\n" +
+                    "FROM SeedInfo S\n" +
+                    "JOIN (SELECT count(*) quantity, idx FROM UserSeed WHERE seedIdx=? AND userIdx=?) US\n" +
+                    "WHERE S.idx=?";
+        }
 
         List<Seed> seedList = this.jdbcTemplate.query(selectSeedListQuery,
                 (rs,rowNum)-> new Seed(

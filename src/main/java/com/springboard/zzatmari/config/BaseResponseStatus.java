@@ -55,6 +55,7 @@ public enum BaseResponseStatus {
 
     //seeds
     SEEDS_ID_EMPTY(false, 2070, "seedIdx를 입력해주세요"),
+    SEEDS_TYPE_ERROR_TYPE(false, 2071, "type은 0, 1로 입력해주세요"),
 
     //plant
     PLANTS_ID_EMPTY(false, 2080, "plantIdx를 입력해주세요"),

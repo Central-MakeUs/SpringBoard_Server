@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import static com.springboard.zzatmari.config.BaseResponseStatus.SEEDS_ID_EMPTY;
+import static com.springboard.zzatmari.config.BaseResponseStatus.SEEDS_TYPE_ERROR_TYPE;
 
 @RestController
 @RequestMapping("/seeds")
@@ -30,13 +31,13 @@ public class SeedController {
     }
 
     /**
-     * 씨앗정보 조회
+     * 씨앗정보 상세조회
      * [GET] /seeds/:seedIdx
      * @return BaseResponse<GetSeedDetailRes>
      */
     @ResponseBody
     @GetMapping("/{seedIdx}")
-    public BaseResponse<GetSeedDetailRes> getSeedDetail(@PathVariable int seedIdx) {
+    public BaseResponse<GetSeedDetailRes> getSeedDetail(@PathVariable int seedIdx, @RequestParam(required = false, defaultValue = "0") String type) {
         try{
             int userIdx = jwtService.getUserIdx();
 
@@ -44,7 +45,11 @@ public class SeedController {
                 return new BaseResponse<>(SEEDS_ID_EMPTY);
             }
 
-            GetSeedDetailRes response = seedProvider.getSeedDetail(userIdx, seedIdx);
+            int t = Integer.parseInt(type);
+            if(t != 0 && t != 1)
+                return new BaseResponse<>(SEEDS_TYPE_ERROR_TYPE);
+
+            GetSeedDetailRes response = seedProvider.getSeedDetail(userIdx, seedIdx, t);
             return new BaseResponse<>(response);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
