@@ -32,7 +32,7 @@ public class PlantService {
     //씨앗심기
     public void plantSeed(int userIdx, int userSeedIdx, int status) throws BaseException {
 
-        Plant plant = plantDao.checkPlant(userSeedIdx);
+        Plant plant = plantProvider.checkPlant(userSeedIdx);
 
         if(plant.getCount() == 0)
             throw new BaseException(PLANTS_NOT_EXIST);

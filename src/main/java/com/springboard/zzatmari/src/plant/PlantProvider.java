@@ -3,6 +3,7 @@ package com.springboard.zzatmari.src.plant;
 import com.springboard.zzatmari.config.BaseException;
 import com.springboard.zzatmari.src.plant.PlantDao;
 import com.springboard.zzatmari.src.plant.model.GetPlantRes;
+import com.springboard.zzatmari.src.plant.model.Plant;
 import com.springboard.zzatmari.src.user.model.GetUserSeedRes;
 import com.springboard.zzatmari.utils.JwtService;
 import org.slf4j.Logger;
@@ -12,7 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.springboard.zzatmari.config.BaseResponseStatus.DATABASE_ERROR;
+import static com.springboard.zzatmari.config.BaseResponseStatus.*;
+import static com.springboard.zzatmari.config.BaseResponseStatus.PLANTS_CANT_HARVEST;
 
 @Service
 public class PlantProvider {
@@ -31,8 +33,25 @@ public class PlantProvider {
 
     //키우고있는 식물 조회
     public GetPlantRes getPlant(int plantIdx) throws BaseException {
+
+        Plant plant = checkPlant(plantIdx);
+
+        if(plant.getCount() == 0 || plant.getStatus() != 1)
+            throw new BaseException(PLANTS_NOT_PLANTED);
+
         try{
             return plantDao.selectPlant(plantIdx);
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    //키우고있는 식물 조회
+    public Plant checkPlant(int plantIdx) throws BaseException {
+
+        try{
+            return plantDao.checkPlant(plantIdx);
         }
         catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
