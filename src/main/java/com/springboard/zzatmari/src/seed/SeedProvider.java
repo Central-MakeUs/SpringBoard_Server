@@ -31,7 +31,6 @@ public class SeedProvider {
     //씨앗정보 조회
     public GetSeedDetailRes getSeedDetail(int userIdx, int seedIdx, int type) throws BaseException {
         try {
-
             return seedDao.selectSeedDetail(userIdx, seedIdx, type);
 
         } catch (Exception exception) {

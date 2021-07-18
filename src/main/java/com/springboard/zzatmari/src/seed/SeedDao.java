@@ -36,16 +36,15 @@ public class SeedDao {
                     "       needSunlight sunlight, floweringTime,\n" +
                     "       growthTime, rewardSunlight reward, quantity\n" +
                     "FROM SeedInfo S\n" +
-                    "JOIN (SELECT count(*) quantity FROM UserSeed WHERE seedIdx=? AND userIdx=?) US\n" +
-                    "WHERE S.idx=?";
+                    "JOIN (SELECT count(*) quantity, seedIdx FROM UserSeed WHERE seedIdx=? AND userIdx=?) US ON US.seedIdx=S.idx" +
+                    " WHERE S.idx=?";
         }
         else{ //씨앗창고에서 조회
-            selectSeedListQuery = "SELECT US.idx seedIdx, seedName, seedImgUrl,\n" +
-                    "       needSunlight sunlight, floweringTime,\n" +
-                    "       growthTime, rewardSunlight reward, quantity\n" +
-                    "FROM SeedInfo S\n" +
-                    "JOIN (SELECT count(*) quantity, idx FROM UserSeed WHERE seedIdx=? AND userIdx=?) US\n" +
-                    "WHERE S.idx=?";
+            selectSeedListQuery = "SELECT US.idx seedIdx, seedName, seedImgUrl,needSunlight sunlight, floweringTime,\n" +
+                    "                    growthTime, rewardSunlight reward, quantity\n" +
+                    "                    FROM SeedInfo S\n" +
+                    "                    JOIN (SELECT count(*) quantity, seedIdx, idx FROM UserSeed WHERE idx=? AND userIdx=?) US ON US.seedIdx=S.idx\n" +
+                    "                    WHERE US.idx=?";
         }
 
         return this.jdbcTemplate.queryForObject(selectSeedListQuery,
