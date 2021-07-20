@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class GetSeedDetailRes {
+    private int mySunlight;
     private int seedIdx;
     private String seedName;
     private String seedImgUrl;
