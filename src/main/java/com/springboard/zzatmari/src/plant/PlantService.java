@@ -38,7 +38,6 @@ public class PlantService {
             throw new BaseException(PLANTS_NOT_EXIST);
         else{
             //심을수 없는 경우
-            System.out.println(plant.getStatus());
             if(status == 1 && plant.getStatus() != 0)
                 throw new BaseException(PLANTS_CANT_PLANT);
 
