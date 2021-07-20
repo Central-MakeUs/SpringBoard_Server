@@ -42,7 +42,7 @@ public class SeedController {
      */
     @ResponseBody
     @GetMapping("/{seedIdx}")
-    public BaseResponse<GetSeedDetailRes> getSeedDetail(@PathVariable int seedIdx, @RequestParam(required = false, defaultValue = "0") String type) {
+    public BaseResponse<GetSeedDetailRes> getSeedDetail(@PathVariable int seedIdx) {
         try{
             int userIdx = jwtService.getUserIdx();
 
@@ -50,11 +50,7 @@ public class SeedController {
                 return new BaseResponse<>(SEEDS_ID_EMPTY);
             }
 
-            int t = Integer.parseInt(type);
-            if(t != 0 && t != 1)
-                return new BaseResponse<>(SEEDS_TYPE_ERROR_TYPE);
-
-            GetSeedDetailRes response = seedProvider.getSeedDetail(userIdx, seedIdx, t);
+            GetSeedDetailRes response = seedProvider.getSeedDetail(userIdx, seedIdx);
             return new BaseResponse<GetSeedDetailRes>(response);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));

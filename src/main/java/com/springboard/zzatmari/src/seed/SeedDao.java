@@ -23,31 +23,18 @@ public class SeedDao {
     }
 
     //씨앗정보 조회
-    public GetSeedDetailRes selectSeedDetail(int userIdx, int seedIdx, int type){
+    public GetSeedDetailRes selectSeedDetail(int userIdx, int seedIdx){
         String selectSeedsQuery = "SELECT U.sunlight mySunlight FROM User U WHERE idx=?";
         int selectSeedsParams = userIdx;
 
-        //SeedInfo idx반환
-        String selectSeedListQuery;
+        String selectSeedListQuery = "SELECT S.idx seedIdx, seedName, seedImgUrl,\n" +
+                "                          needSunlight sunlight, floweringTime,\n" +
+                "                          growthTime, rewardSunlight reward, ifnull(quantity,0) quantity\n" +
+                "                    FROM SeedInfo S\n" +
+                "                    LEFT JOIN (SELECT count(*) quantity, seedIdx FROM UserSeed WHERE seedIdx=? AND userIdx=? AND status=0) US ON US.seedIdx=S.idx\n" +
+                "                    WHERE S.idx=?";
 
         Object[] selectSeedListParams = new Object[]{seedIdx, userIdx, seedIdx};
-
-        //씨앗상점에서 조회
-        if(type==1){
-            selectSeedListQuery = "SELECT S.idx seedIdx, seedName, seedImgUrl,\n" +
-                    "       needSunlight sunlight, floweringTime,\n" +
-                    "       growthTime, rewardSunlight reward, quantity\n" +
-                    "FROM SeedInfo S\n" +
-                    "JOIN (SELECT count(*) quantity, seedIdx FROM UserSeed WHERE seedIdx=? AND userIdx=?) US ON US.seedIdx=S.idx" +
-                    " WHERE S.idx=?";
-        }
-        else{ //씨앗창고에서 조회
-            selectSeedListQuery = "SELECT US.idx seedIdx, seedName, seedImgUrl,needSunlight sunlight, floweringTime,\n" +
-                    "                    growthTime, rewardSunlight reward, quantity\n" +
-                    "                    FROM SeedInfo S\n" +
-                    "                    JOIN (SELECT count(*) quantity, seedIdx, idx FROM UserSeed WHERE idx=? AND userIdx=?) US ON US.seedIdx=S.idx\n" +
-                    "                    WHERE US.idx=?";
-        }
 
         int mySunlight =  this.jdbcTemplate.queryForObject(selectSeedsQuery,
                 int.class,
