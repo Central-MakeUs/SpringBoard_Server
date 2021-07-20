@@ -23,7 +23,7 @@ public class TimerDao {
         String selectTimersQuery = "SELECT T.idx timerIdx, hour, minute,\n" +
                 "       DATE_FORMAT(DATE_ADD(DATE_ADD(now(), INTERVAL hour HOUR), INTERVAL minute MINUTE), '%H:%i') time\n" +
                 "FROM (SELECT idx, ifnull(case when timer >= 60 then TRUNCATE(timer/60, 0) end, 0) hour, timer%60 minute FROM Timer WHERE userIdx=?) T\n" +
-                "ORDER BY time";
+                "ORDER BY hour, minute";
         Object[] selectTimersParams = new Object[]{userIdx};
 
         return this.jdbcTemplate.query(selectTimersQuery,
