@@ -34,7 +34,8 @@ public class UserDao {
                 "FROM UserSeed US\n" +
                 "JOIN SeedInfo S ON S.idx=US.seedIdx\n" +
                 "WHERE US.userIdx=? AND US.status=0\n" +
-                "ORDER BY US.createdAt DESC";
+                "GROUP BY seedIdx\n" +
+                "ORDER BY seedName";
 
         int selectUserSeedsParams = userIdx;
         return this.jdbcTemplate.query(selectUserSeedsQuery,
