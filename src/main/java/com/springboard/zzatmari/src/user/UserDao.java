@@ -30,12 +30,12 @@ public class UserDao {
 
     //씨앗창고조회
     public List<GetUserSeedRes> selectUserSeeds(int userIdx){
-        String selectUserSeedsQuery = "SELECT US.idx seedIdx, seedName, seedImgUrl\n" +
+        String selectUserSeedsQuery = "SELECT US.seedIdx seedIdx, seedName, seedImgUrl\n" +
                 "FROM UserSeed US\n" +
                 "JOIN SeedInfo S ON S.idx=US.seedIdx\n" +
                 "WHERE US.userIdx=? AND US.status=0\n" +
                 "GROUP BY seedIdx\n" +
-                "ORDER BY seedName";
+                "ORDER BY S.idx";
 
         int selectUserSeedsParams = userIdx;
         return this.jdbcTemplate.query(selectUserSeedsQuery,
