@@ -35,7 +35,7 @@ public class PlantDao {
                 "       TRUNCATE(executionTime/growthTime,0) growthStage,\n" +
                 "       executionTime, floweringTime, case when TRUNCATE(executionTime/growthTime,0)=0 then 0 when executionTime=floweringTime then 2 else 1 end status\n" +
                 "   FROM (SELECT US.idx plantIdx, S.idx seedIdx, seedImgUrl, growthTime,\n" +
-                "                 case when TRUNCATE((SUM(case when E.createdAt >= US.updatedAt then min else 0 end)/60),0)>floweringTime then floweringTime else TRUNCATE(SUM(case when E.createdAt >= US.updatedAt then min else 0 end)/60,0) end executionTime,\n" +
+                "                 case when SUM(case when E.createdAt >= US.updatedAt then min else 0 end)>floweringTime then floweringTime else SUM(case when E.createdAt >= US.updatedAt then min else 0 end) end executionTime,\n" +
                 "       floweringTime FROM UserSeed US\n" +
                 "           JOIN SeedInfo S ON US.seedIdx=S.idx\n" +
                 "           LEFT JOIN List L ON L.userIdx=US.userIdx\n" +
