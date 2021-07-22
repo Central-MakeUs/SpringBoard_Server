@@ -43,6 +43,9 @@ public class GoalDao {
                 "((DATE_FORMAT(now(), '%H') >= U.dayStartHour)\n" +
                 "AND (G.updatedAt  BETWEEN CONCAT(DATE_FORMAT(CURDATE(),'%Y-%m-%d'),' ',TIME_FORMAT(CONCAT(U.dayStartHour, ':', U.dayStartMinute, ':00' ), '%H:%i:%S'))\n" +
                 "    AND CONCAT(DATE_FORMAT(CURDATE()+1,'%Y-%m-%d'),' ',TIME_FORMAT(CONCAT(U.dayStartHour, ':', U.dayStartMinute, ':00' ), '%H:%i:%S'))))) AND userIdx=?";
+
+        String selectGoalCheckQuery = "SELECT EXISTS(SELECT idx FROM Goal WHERE userIdx=?)";
+
         Object[] selectGoalResetCheckParams = new Object[]{userIdx};
 
         List<GoalLists> result1 = this.jdbcTemplate.query(selectGoalsQuery,
@@ -65,7 +68,14 @@ public class GoalDao {
                 boolean.class
                 ,selectGoalResetCheckParams);
 
-        return new GetGoalsRes(resetCheck, result1, result2);
+        int isExist = this.jdbcTemplate.queryForObject(selectGoalCheckQuery,
+                int.class
+                ,selectGoalResetCheckParams);
+
+        if(isExist == 0)
+            resetCheck = true;
+
+        return new GetGoalsRes(!resetCheck, result1, result2);
     }
 
     //목표 중복체크
@@ -104,7 +114,7 @@ public class GoalDao {
 
     //목표 초기화
     public int resetGoals(int userIdx){
-        String resetGoalsQuery = "UPDATE Goal SET goalTime=0 WHERE userIdx=?";
+        String resetGoalsQuery = "UPDATE Goal SET goalTime=0, updatedAt=now() WHERE userIdx=?";
         Object[] resetGoalsParams = new Object[]{userIdx};
 
         return this.jdbcTemplate.update(resetGoalsQuery, resetGoalsParams);
