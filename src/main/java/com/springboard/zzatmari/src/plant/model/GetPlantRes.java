@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetPlantRes {
+    private int plantIdx;
     private int seedIdx;
     private String seedImgUrl;
     private String plantImgUrl;

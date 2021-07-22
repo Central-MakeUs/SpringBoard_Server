@@ -31,10 +31,10 @@ public class PlantDao {
 
     //키우고있는 식물 조회
     public GetPlantRes selectPlant(int userIdx){
-        String selectPlantQuery = "SELECT E.seedIdx, seedImgUrl,\n" +
+        String selectPlantQuery = "SELECT E.plantIdx, E.seedIdx, seedImgUrl,\n" +
                 "       TRUNCATE(executionTime/growthTime,0) growthStage,\n" +
                 "       executionTime, floweringTime, case when TRUNCATE(executionTime/growthTime,0)=0 then 0 when executionTime=floweringTime then 2 else 1 end status\n" +
-                "   FROM (SELECT S.idx seedIdx, seedImgUrl, growthTime,\n" +
+                "   FROM (SELECT US.idx plantIdx, S.idx seedIdx, seedImgUrl, growthTime,\n" +
                 "                 case when TRUNCATE((SUM(case when E.createdAt >= US.updatedAt then min else 0 end)/60),0)>floweringTime then floweringTime else TRUNCATE(SUM(case when E.createdAt >= US.updatedAt then min else 0 end)/60,0) end executionTime,\n" +
                 "       floweringTime FROM UserSeed US\n" +
                 "           JOIN SeedInfo S ON US.seedIdx=S.idx\n" +
@@ -51,6 +51,7 @@ public class PlantDao {
 
         GetPlantRes getPlantRes = this.jdbcTemplate.queryForObject(selectPlantQuery,
                 (rs,rowNum) -> new GetPlantRes(
+                        rs.getInt("plantIdx"),
                         rs.getInt("seedIdx"),
                         rs.getString("seedImgUrl"),
                         null,
