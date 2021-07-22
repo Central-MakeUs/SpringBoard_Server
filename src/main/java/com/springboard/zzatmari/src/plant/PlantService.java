@@ -30,24 +30,16 @@ public class PlantService {
     }
 
     //씨앗심기
-    public void plantSeed(int userIdx, int userSeedIdx, int status) throws BaseException {
+    public void plantSeed(int userIdx, int seedIdx, int status) throws BaseException {
 
-        Plant plant = plantProvider.checkPlant(userSeedIdx);
+        //사용자 현재 식물 조회
+        Plant plant = plantProvider.checkUserPlant(userIdx);
 
-        if(plant.getCount() == 0)
-            throw new BaseException(PLANTS_NOT_EXIST);
-        else{
-            //심을수 없는 경우
-            if(status == 1 && plant.getStatus() != 0)
-                throw new BaseException(PLANTS_CANT_PLANT);
-
-            //수확할 수 없는 경우
-            if(status == 2 && plant.getStatus() != 1)
-                throw new BaseException(PLANTS_CANT_HARVEST);
-        }
+        if(plant.getCount() != 0)
+            throw new BaseException(PLANTS_IS_EXIST);
 
         try{
-            int result = plantDao.updateUserSeedStatus(userIdx, userSeedIdx, status);
+            int result = plantDao.updateUserSeedStatus(userIdx, seedIdx, status);
 
             if(result != 1)
                 throw new BaseException(REQUEST_FAIL);

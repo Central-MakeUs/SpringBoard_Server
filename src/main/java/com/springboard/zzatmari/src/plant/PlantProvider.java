@@ -59,6 +59,17 @@ public class PlantProvider {
         }
     }
 
+    //사용자 씨앗체크
+    public Plant checkUserPlant(int userIdx) throws BaseException {
+
+        try{
+            return plantDao.checkUserPlant(userIdx);
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     //키운 식물 조회
     public List<GetPlantsRes> getPlants(int userIdx) throws BaseException {
 

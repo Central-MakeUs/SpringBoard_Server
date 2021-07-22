@@ -22,10 +22,10 @@ public class PlantDao {
     }
 
     //씨앗심기
-    public int updateUserSeedStatus(int userIdx, int userSeedIdx, int status){
+    public int updateUserSeedStatus(int userIdx, int seedIdx, int status){
         String updateUserSeedStatusQuery = "UPDATE UserSeed SET status=? WHERE status=? AND userIdx=? AND seedIdx=? LIMIT 1";
 
-        Object[] updateUserSeedStatusParams = new Object[]{status, status-1, userIdx, userSeedIdx};
+        Object[] updateUserSeedStatusParams = new Object[]{status, status-1, userIdx, seedIdx};
         return this.jdbcTemplate.update(updateUserSeedStatusQuery, updateUserSeedStatusParams);
     }
 
@@ -44,7 +44,7 @@ public class PlantDao {
                 "       AND US.idx=? AND US.status=1) E";
         int selectPlantParams = plantIdx;
 
-        String selectPlantImgQuery = "#해당 단계의 이미지 조회\n" +
+        String selectPlantImgQuery =
                 "SELECT plantImgUrl\n" +
                 "FROM PlantImg PI\n" +
                 "WHERE seedIdx=? AND stage=?";
@@ -77,6 +77,22 @@ public class PlantDao {
     public Plant checkPlant(int plantIdx){
         String checkPlantQuery = "SELECT count(*) count, ifnull(idx,0) plantIdx, ifnull(status,0) status FROM UserSeed WHERE idx=?";
         int checkPlantParams = plantIdx;
+
+
+        Plant getPlantRes = this.jdbcTemplate.queryForObject(checkPlantQuery,
+                (rs,rowNum) -> new Plant(
+                        rs.getInt("count"),
+                        rs.getInt("plantIdx"),
+                        rs.getInt("status")), checkPlantParams
+        );
+
+        return getPlantRes;
+    }
+
+    //사용자가 씨앗 조회
+    public Plant checkUserPlant(int userIdx){
+        String checkPlantQuery = "SELECT count(*) count, ifnull(idx,0) plantIdx, ifnull(status,0) status FROM UserSeed WHERE userIdx=? AND status=1";
+        Object[] checkPlantParams = new Object[]{userIdx};
 
 
         Plant getPlantRes = this.jdbcTemplate.queryForObject(checkPlantQuery,
