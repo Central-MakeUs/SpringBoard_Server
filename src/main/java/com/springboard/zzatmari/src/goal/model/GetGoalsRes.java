@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class GetGoalsRes {
+    private boolean resetCheck;
     private List<GoalLists> digitalDetox;
     private List<GoalLists> selfDevelopment;
 }

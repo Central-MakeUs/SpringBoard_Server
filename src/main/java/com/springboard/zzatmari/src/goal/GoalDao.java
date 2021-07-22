@@ -26,11 +26,24 @@ public class GoalDao {
     //목표조회
     public GetGoalsRes selectGoals(int userIdx){
 
+        //목표 리스트 조회
         String selectGoalsQuery = "SELECT L.idx listIdx, L.listItem, IFNULL(G.goalTime,0) time\n" +
                 "FROM  List L LEFT JOIN Goal G ON G.listIdx=L.idx\n" +
                 "WHERE L.userIdx=? AND listType=? AND L.status=0";
         Object[] selectGoalsParams1 = new Object[]{userIdx, 0};
         Object[] selectGoalsParams2 = new Object[]{userIdx, 1};
+
+        //초기화 여부 체크
+        String selectGoalResetCheckQuery = "SELECT count(*) count\n" +
+                "    FROM Goal G\n" +
+                "    JOIN User U on U.idx=G.userIdx\n" +
+                "WHERE (((DATE_FORMAT(now(), '%H') < U.dayStartHour)\n" +
+                "AND (G.updatedAt  BETWEEN CONCAT(DATE_FORMAT(CURDATE()-1,'%Y-%m-%d'),' ',TIME_FORMAT(CONCAT(U.dayStartHour, ':', U.dayStartMinute, ':00' ), '%H:%i:%S'))\n" +
+                "    AND CONCAT(DATE_FORMAT(CURDATE(),'%Y-%m-%d'),' ',TIME_FORMAT(CONCAT(U.dayStartHour, ':', U.dayStartMinute, ':00' ), '%H:%i:%S')))) OR\n" +
+                "((DATE_FORMAT(now(), '%H') >= U.dayStartHour)\n" +
+                "AND (G.updatedAt  BETWEEN CONCAT(DATE_FORMAT(CURDATE(),'%Y-%m-%d'),' ',TIME_FORMAT(CONCAT(U.dayStartHour, ':', U.dayStartMinute, ':00' ), '%H:%i:%S'))\n" +
+                "    AND CONCAT(DATE_FORMAT(CURDATE()+1,'%Y-%m-%d'),' ',TIME_FORMAT(CONCAT(U.dayStartHour, ':', U.dayStartMinute, ':00' ), '%H:%i:%S'))))) AND userIdx=?";
+        Object[] selectGoalResetCheckParams = new Object[]{userIdx};
 
         List<GoalLists> result1 = this.jdbcTemplate.query(selectGoalsQuery,
                 (rs,rowNum)-> new GoalLists(
@@ -48,7 +61,11 @@ public class GoalDao {
                 ),selectGoalsParams2
         );
 
-        return new GetGoalsRes(result1, result2);
+        boolean resetCheck = this.jdbcTemplate.queryForObject(selectGoalResetCheckQuery,
+                boolean.class
+                ,selectGoalResetCheckParams);
+
+        return new GetGoalsRes(resetCheck, result1, result2);
     }
 
     //목표 중복체크
