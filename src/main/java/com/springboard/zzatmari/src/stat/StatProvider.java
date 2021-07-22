@@ -30,7 +30,7 @@ public class StatProvider {
         this.jwtService = jwtService;
     }
     //통계 달력 조회
-    public List<GetStatsRes> getStats(int userIdx, int year, int month) throws BaseException {
+    public GetStatsRes getStats(int userIdx, int year, int month) throws BaseException {
         try{
             return statDao.selectStats(userIdx, year, month);
         }

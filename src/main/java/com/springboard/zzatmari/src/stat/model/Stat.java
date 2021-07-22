@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetStatsRes {
-    private int continuousDay;
-    private List<Stat> statList;
+public class Stat {
+    private int day;
+    private int percent;
 }

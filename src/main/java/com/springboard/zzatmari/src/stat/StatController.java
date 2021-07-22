@@ -41,7 +41,7 @@ public class StatController {
      */
     @ResponseBody
     @GetMapping("")
-    public BaseResponse<List<GetStatsRes>> getStats(@RequestParam(required = false, defaultValue = "0") String month, @RequestParam(required = false, defaultValue = "0") String year) {
+    public BaseResponse<GetStatsRes> getStats(@RequestParam(required = false, defaultValue = "0") String month, @RequestParam(required = false, defaultValue = "0") String year) {
 
         try{
 
@@ -56,7 +56,7 @@ public class StatController {
                 return new BaseResponse<>(STATS_YEAR_ERROR_TYPE);
             }
 
-            List<GetStatsRes> getStatsRes = statProvider.getStats(userIdx, y, m);
+            GetStatsRes getStatsRes = statProvider.getStats(userIdx, y, m);
             return new BaseResponse<>(getStatsRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));

@@ -3,6 +3,7 @@ package com.springboard.zzatmari.src.stat;
 import com.springboard.zzatmari.src.goal.model.GoalLists;
 import com.springboard.zzatmari.src.stat.model.GetStatsListRes;
 import com.springboard.zzatmari.src.stat.model.GetStatsRes;
+import com.springboard.zzatmari.src.stat.model.Stat;
 import com.springboard.zzatmari.src.user.model.GetUserRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,20 +23,43 @@ public class StatDao {
 
     }
 
-    public List<GetStatsRes> selectStats(int userIdx, int year, int month){
+    //통계 달력 조회
+    public GetStatsRes selectStats(int userIdx, int year, int month) {
         String selectStatsQuery = "SELECT DAY(executionDate) day, case when time>100 then 100 else time end percent\n" +
                 "FROM (SELECT TRUNCATE((SUM(E.min)/E.goalTime)*100,0) time, executionDate, listIdx FROM Execution E WHERE status=2 GROUP BY executionDate) E\n" +
                 "JOIN List L on L.idx=E.listIdx\n" +
                 "JOIN User U on U.idx=L.userIdx\n" +
                 "WHERE U.idx=? AND YEAR(executionDate)=? AND MONTH(executionDate)=? AND time>0 ORDER BY day";
         Object[] selectStatsParams = new Object[]{userIdx, year, month};
-        return this.jdbcTemplate.query(selectStatsQuery,
-                (rs, rowNum) -> new GetStatsRes(
+        List<Stat> statList = this.jdbcTemplate.query(selectStatsQuery,
+                (rs, rowNum) -> new Stat(
                         rs.getInt("day"),
                         rs.getInt("percent")),
-                        selectStatsParams);
+                selectStatsParams);
+
+        int count = 0;
+        int countinuousDay = 0;
+        if (statList.size() != 0){
+            count = 1;
+            countinuousDay = 1;
+        }
+        for (int i = 0; i < statList.size() - 1; i++) {
+                if (statList.get(i).getDay() == statList.get(i + 1).getDay() - 1) {
+                    count += 1;
+                    if (countinuousDay < count)
+                        countinuousDay = count;
+                } else {
+                    System.out.println("아님" + count);
+                    count = 1;
+                }
+            }
+
+        GetStatsRes getStatsRes = new GetStatsRes(countinuousDay, statList);
+        return getStatsRes;
+
     }
 
+    //통계 리스트 조회
     public GetStatsListRes selectStatsList(int userIdx, String type, int year, int month, int day){
 
         String selectStatsInfoQuery = "SELECT ifnull(ROUND((digitalDetoxTime/(digitalDetoxTime+selfDevelopmentTime)*100),0),0) digitalDetoxPercent,\n" +
@@ -96,7 +120,6 @@ public class StatDao {
                         rs.getInt("selfDevelopmentPercent"),
                         rs.getInt("digitalDetoxTime"),
                         rs.getInt("selfDevelopmentTime"),
-                        rs.getInt("continuousDay"),
                         result1,
                         result2),
                 selectStatsParams);

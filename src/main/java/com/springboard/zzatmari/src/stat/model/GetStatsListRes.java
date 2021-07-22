@@ -16,7 +16,6 @@ public class GetStatsListRes {
     private int selfDevelopmentPercent;
     private int digitalDetoxTime;
     private int selfDevelopmentTime;
-    private int continuousDay;
     private List<GoalLists> digitalDetox;
     private List<GoalLists> selfDevelopment;
 }
