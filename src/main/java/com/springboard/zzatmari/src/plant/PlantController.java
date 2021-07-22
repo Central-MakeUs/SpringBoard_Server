@@ -74,18 +74,12 @@ public class PlantController {
      * @return BaseResponse<GetPlantRes>
      */
     @ResponseBody
-    @GetMapping("{plantIdx}")
-    public BaseResponse<GetPlantRes> getPlant(@PathVariable int plantIdx) {
+    @GetMapping("/growing")
+    public BaseResponse<GetPlantRes> getPlant() {
 
         try{
             int userIdx = jwtService.getUserIdx();
-
-            //빈값 체크
-            if(plantIdx <= 0){
-                return new BaseResponse<>(PLANTS_ID_EMPTY);
-            }
-
-            GetPlantRes getPlantRes = plantProvider.getPlant(plantIdx);
+            GetPlantRes getPlantRes = plantProvider.getPlant(userIdx);
             return new BaseResponse<GetPlantRes>(getPlantRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));

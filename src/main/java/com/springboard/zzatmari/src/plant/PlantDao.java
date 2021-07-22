@@ -30,7 +30,7 @@ public class PlantDao {
     }
 
     //키우고있는 식물 조회
-    public GetPlantRes selectPlant(int plantIdx){
+    public GetPlantRes selectPlant(int userIdx){
         String selectPlantQuery = "SELECT E.seedIdx, seedImgUrl,\n" +
                 "       TRUNCATE(executionTime/growthTime,0) growthStage,\n" +
                 "       executionTime, floweringTime, case when TRUNCATE(executionTime/growthTime,0)=0 then 0 when executionTime=floweringTime then 2 else 1 end status\n" +
@@ -41,8 +41,8 @@ public class PlantDao {
                 "           LEFT JOIN List L ON L.userIdx=US.userIdx\n" +
                 "        LEFT JOIN Execution E ON E.listIdx=L.idx\n" +
                 "        WHERE E.status=2\n" +
-                "       AND US.idx=? AND US.status=1) E";
-        int selectPlantParams = plantIdx;
+                "       AND US.userIdx=? AND US.status=1) E";
+        int selectPlantParams = userIdx;
 
         String selectPlantImgQuery =
                 "SELECT plantImgUrl\n" +

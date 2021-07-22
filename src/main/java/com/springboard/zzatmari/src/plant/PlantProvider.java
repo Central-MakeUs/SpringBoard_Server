@@ -33,15 +33,12 @@ public class PlantProvider {
     }
 
     //키우고있는 식물 조회
-    public GetPlantRes getPlant(int plantIdx) throws BaseException {
+    public GetPlantRes getPlant(int userIdx) throws BaseException {
 
-        Plant plant = checkPlant(plantIdx);
-
-        if(plant.getCount() == 0 || plant.getStatus() != 1)
-            throw new BaseException(PLANTS_NOT_PLANTED);
+        Plant plant = checkPlant(userIdx);
 
         try{
-            return plantDao.selectPlant(plantIdx);
+            return plantDao.selectPlant(userIdx);
         }
         catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
