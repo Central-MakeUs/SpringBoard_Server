@@ -39,9 +39,8 @@ public class PlantDao {
                 "       floweringTime FROM UserSeed US\n" +
                 "           JOIN SeedInfo S ON US.seedIdx=S.idx\n" +
                 "           LEFT JOIN List L ON L.userIdx=US.userIdx\n" +
-                "        LEFT JOIN Execution E ON E.listIdx=L.idx\n" +
-                "        WHERE E.status=2\n" +
-                "       AND US.userIdx=? AND US.status=1) E";
+                "        LEFT JOIN (SELECT listIdx, createdAt, min FROM Execution E WHERE E.status=2) E ON E.listIdx=L.idx\n" +
+                "        WHERE US.userIdx=? AND US.status=1) E";
         int selectPlantParams = userIdx;
 
         String selectPlantImgQuery =
