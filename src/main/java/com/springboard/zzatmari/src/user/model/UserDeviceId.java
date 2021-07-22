@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostUserReq {
-    private String token;
-    private String email;
-    private String password;
+public class UserDeviceId {
+    private int count;
+    private int userIdx;
+    private String deviceId;
 }

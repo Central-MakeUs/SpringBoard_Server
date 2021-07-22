@@ -4,12 +4,9 @@ package com.springboard.zzatmari.src.user;
 
 import com.springboard.zzatmari.config.BaseException;
 import com.springboard.zzatmari.config.secret.Secret;
-import com.springboard.zzatmari.src.user.model.PostUserRes;
-import com.springboard.zzatmari.src.user.model.PostUserTimeReq;
+import com.springboard.zzatmari.src.user.model.*;
 import com.springboard.zzatmari.utils.AES128;
 import com.springboard.zzatmari.utils.JwtService;
-import com.springboard.zzatmari.src.user.model.PatchUserReq;
-import com.springboard.zzatmari.src.user.model.PostUserReq;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +38,38 @@ public class UserService {
         try{
             int isSuccess = userDao.updateUserTime(postUserTimeReq, userIdx);
             return isSuccess;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    //JWT 발급
+    public String createJWT(int userIdx) throws BaseException {
+
+        try{
+            //jwt 발급.
+            String jwt = jwtService.createJwt(userIdx);
+            return jwt;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    //비회원 회원가입, 로그인
+    public PostUserRes createUnknownUser(PostUserReq postUserReq) throws BaseException {
+
+        UserDeviceId userDeviceId = userProvider.checkDeviceId(postUserReq.getToken());
+        int userIdx = userDeviceId.getUserIdx();
+
+        try{
+
+            //중복
+            if(userDeviceId.getCount() == 0){ //회원가입 진행
+                userIdx = userDao.createUnknownUser(postUserReq.getToken());
+            }
+
+            String jwt = createJWT(userIdx);
+            return new PostUserRes(jwt,userIdx);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

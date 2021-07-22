@@ -148,6 +148,7 @@ public class UserController {
 
     }
 
+
     /**
      * 회원가입 API
      * [POST] /users
@@ -156,18 +157,24 @@ public class UserController {
     // Body
     @ResponseBody
     @PostMapping("")
-    public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
-        // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
-        if(postUserReq.getEmail() == null){
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-        }
-        //이메일 정규표현
-        if(!isRegexEmail(postUserReq.getEmail())){
-            return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
-        }
+    public BaseResponse<PostUserRes> createUser(@RequestParam String type, @RequestBody PostUserReq postUserReq) {
+
         try{
-            PostUserRes postUserRes = userService.createUser(postUserReq);
+            if(type == null)
+                return new BaseResponse<>(USERS_TYPE_EMPTY);
+
+            int t = Integer.parseInt(type);
+
+        if(t == 0){ //비회원 로그인
+            if(postUserReq.getToken() == null){
+                return new BaseResponse<>(USERS_TOKEN_EMPTY);
+            }
+
+            PostUserRes postUserRes = userService.createUnknownUser(postUserReq);
             return new BaseResponse<>(postUserRes);
+        }
+
+        return new BaseResponse<>(USERS_TYPE_ERROR_TYPE);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }

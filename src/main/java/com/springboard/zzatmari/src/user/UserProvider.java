@@ -42,6 +42,15 @@ public class UserProvider {
         }
     }
 
+    //기기번호 체크
+    public UserDeviceId checkDeviceId(String token) throws BaseException{
+        try{
+            return userDao.checkDeviceId(token);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     public List<GetUserRes> getUsers() throws BaseException{
         try{
             List<GetUserRes> getUserRes = userDao.getUsers();

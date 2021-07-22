@@ -46,6 +46,29 @@ public class UserDao {
         );
     }
 
+    //기기번호 체크
+    public UserDeviceId checkDeviceId(String token){
+        String checkDeviceIdQuery = "SELECT count(*) count, ifnull(idx,0) userIdx, deviceId FROM User WHERE deviceId=?";
+        String checkDeviceIdParams = token;
+        return this.jdbcTemplate.queryForObject(checkDeviceIdQuery,
+                (rs,rowNum) -> new UserDeviceId(
+                        rs.getInt("count"),
+                        rs.getInt("userIdx"),
+                        rs.getString("deviceId")),
+                checkDeviceIdParams);
+
+    }
+
+    //비회원 회원가입
+    public int createUnknownUser(String deviceId){
+        String createUnknownUserQuery = "insert into User (deviceId) VALUES (?)";
+        Object[] createUnknownUserParams = new Object[]{deviceId};
+        this.jdbcTemplate.update(createUnknownUserQuery, createUnknownUserParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+    }
+
 
     public List<GetUserRes> getUsers(){
         String getUsersQuery = "select * from UserInfo";
@@ -88,8 +111,8 @@ public class UserDao {
 
     public int createUser(PostUserReq postUserReq){
         String createUserQuery = "insert into UserInfo (userName, ID, password, email) VALUES (?,?,?,?)";
-        Object[] createUserParams = new Object[]{postUserReq.getUserName(), postUserReq.getId(), postUserReq.getPassword(), postUserReq.getEmail()};
-        this.jdbcTemplate.update(createUserQuery, createUserParams);
+        //Object[] createUserParams = new Object[]{postUserReq.getUserName(), postUserReq.getId(), postUserReq.getPassword(), postUserReq.getEmail()};
+        this.jdbcTemplate.update(createUserQuery);
 
         String lastInserIdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInserIdQuery,int.class);
