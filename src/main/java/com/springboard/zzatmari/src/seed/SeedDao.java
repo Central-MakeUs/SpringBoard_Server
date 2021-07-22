@@ -124,4 +124,14 @@ public class SeedDao {
         return this.jdbcTemplate.queryForObject(selectUserSunlightQuery, int.class, selectUserSunlightParams);
 
     }
+
+    //씨앗 기본 세팅
+    public int insertSeedDefault(int userIdx){
+        String insertUserSeedQuery = "INSERT INTO UserSeed(userIdx, seedIdx) VALUES(?,1)";
+
+        Object[] insertUserSeedParams = new Object[]{userIdx};
+
+        return this.jdbcTemplate.update(insertUserSeedQuery, insertUserSeedParams);
+
+    }
 }

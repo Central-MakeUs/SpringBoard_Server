@@ -4,6 +4,7 @@ package com.springboard.zzatmari.src.user;
 
 import com.springboard.zzatmari.config.BaseException;
 import com.springboard.zzatmari.config.secret.Secret;
+import com.springboard.zzatmari.src.seed.SeedDao;
 import com.springboard.zzatmari.src.user.model.*;
 import com.springboard.zzatmari.utils.AES128;
 import com.springboard.zzatmari.utils.JwtService;
@@ -20,13 +21,15 @@ public class UserService {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final UserDao userDao;
+    private final SeedDao seedDao;
     private final UserProvider userProvider;
     private final JwtService jwtService;
 
 
     @Autowired
-    public UserService(UserDao userDao, UserProvider userProvider, JwtService jwtService) {
+    public UserService(UserDao userDao, SeedDao seedDao, UserProvider userProvider, JwtService jwtService) {
         this.userDao = userDao;
+        this.seedDao = seedDao;
         this.userProvider = userProvider;
         this.jwtService = jwtService;
 
@@ -66,10 +69,26 @@ public class UserService {
             //중복
             if(userDeviceId.getCount() == 0){ //회원가입 진행
                 userIdx = userDao.createUnknownUser(postUserReq.getToken());
+                createUserDefault(userIdx);
             }
 
             String jwt = createJWT(userIdx);
             return new PostUserRes(jwt,userIdx);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    //새로 추가된 사용자에 대한 기본값 세팅
+    public void createUserDefault(int userIdx) throws BaseException {
+        System.out.println("hi");
+        try{
+            //기본타이머 세팅
+            userDao.insertUserDefault(userIdx);
+
+            //기본씨앗 세팅
+            seedDao.insertSeedDefault(userIdx);
+
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

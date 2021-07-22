@@ -78,6 +78,19 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
     }
 
+    //사용자 기본값 설정
+        public void insertUserDefault(int userIdx){
+        String createUserDefaultQuery = "insert into Timer(userIdx, timer) VALUES(?, ?)";
+        int[] timerList = {1, 5, 10, 30, 60};
+
+        for(int i = 0; i<timerList.length; i++){
+            Object[] createUserDefaultParams = new Object[]{userIdx, timerList[i]};
+            this.jdbcTemplate.update(createUserDefaultQuery, createUserDefaultParams);
+        }
+
+        return;
+    }
+
 
     public List<GetUserRes> getUsers(){
         String getUsersQuery = "select * from UserInfo";
