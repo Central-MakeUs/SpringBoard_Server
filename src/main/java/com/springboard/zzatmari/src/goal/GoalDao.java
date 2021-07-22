@@ -118,4 +118,12 @@ public class GoalDao {
                 int.class,
                 checkUserGoalsParams);
     }
+
+    //목표 초기화안함 -> 목표 한개 업데이트
+    public int unResetGoals(int userIdx){
+        String resetGoalsQuery = "UPDATE Goal SET updatedAt=now() WHERE userIdx=? LIMIT 1";
+        Object[] resetGoalsParams = new Object[]{userIdx};
+
+        return this.jdbcTemplate.update(resetGoalsQuery, resetGoalsParams);
+    }
 }

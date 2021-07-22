@@ -1,6 +1,7 @@
 package com.springboard.zzatmari.src.goal;
 
 import com.springboard.zzatmari.src.goal.model.GetGoalsRes;
+import com.springboard.zzatmari.src.goal.model.PatchGoalResetReq;
 import com.springboard.zzatmari.src.goal.model.PostGoalReq;
 import com.springboard.zzatmari.src.user.model.PostUserReq;
 import org.slf4j.Logger;
@@ -81,11 +82,14 @@ public class GoalController {
      */
     @ResponseBody
     @PatchMapping("")
-    public BaseResponse<String> resetGoals() {
+    public BaseResponse<String> resetGoals(@RequestBody PatchGoalResetReq patchGoalResetReq) {
         try{
             int userIdx = jwtService.getUserIdx();
 
-            goalService.resetGoals(userIdx);
+            if(patchGoalResetReq.getIsReset() != 0 && patchGoalResetReq.getIsReset()!=1)
+                return new BaseResponse<>(GOALS_IS_RESET_ERROR_TYPE);
+
+            goalService.resetGoals(userIdx, patchGoalResetReq.getIsReset());
             return new BaseResponse<String>("");
 
         } catch(BaseException exception){

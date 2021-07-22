@@ -57,7 +57,7 @@ public class GoalService {
     }
 
     //목표 초기화
-    public void resetGoals(int userIdx) throws BaseException {
+    public void resetGoals(int userIdx, int isReset) throws BaseException {
 
         //목표 존재여부 체크
         int isExist = goalProvider.checkUserGoals(userIdx);
@@ -65,11 +65,19 @@ public class GoalService {
         if(isExist == 0)
             return;
 
-        try{
-                int result = goalDao.resetGoals(userIdx);
-                System.out.println(result);
-                if(result == 0)
+        try {
+
+            if (isReset == 0){ //유지
+                int result1 = goalDao.unResetGoals(userIdx);
+                if(result1 == 0)
                     throw new BaseException(REQUEST_FAIL);
+                return;
+        }
+
+            //초기화
+            int result2 = goalDao.resetGoals(userIdx);
+            if(result2 == 0)
+                throw new BaseException(REQUEST_FAIL);
 
 
         } catch (Exception exception) {
