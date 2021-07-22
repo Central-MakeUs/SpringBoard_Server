@@ -56,4 +56,14 @@ public class GoalProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    //목표 존재여부 체크
+    public int checkUserGoals(int userIdx) throws BaseException{
+        try{
+            return goalDao.checkUserGoals(userIdx);
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

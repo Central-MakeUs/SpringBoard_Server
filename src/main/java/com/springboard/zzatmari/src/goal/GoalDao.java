@@ -109,4 +109,13 @@ public class GoalDao {
 
         return this.jdbcTemplate.update(resetGoalsQuery, resetGoalsParams);
     }
+
+    //목표 존재여부 체크
+    public int checkUserGoals(int userIdx){
+        String checkUserGoalsQuery = "SELECT EXISTS(SELECT idx FROM Goal WHERE userIdx=?)";
+        Object[] checkUserGoalsParams = new Object[]{userIdx};
+        return this.jdbcTemplate.queryForObject(checkUserGoalsQuery,
+                int.class,
+                checkUserGoalsParams);
+    }
 }

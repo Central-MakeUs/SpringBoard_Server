@@ -1,6 +1,7 @@
 package com.springboard.zzatmari.src.goal;
 
 import com.springboard.zzatmari.config.BaseException;
+import com.springboard.zzatmari.src.goal.model.GetGoalsRes;
 import com.springboard.zzatmari.src.goal.model.PostGoalReq;
 import com.springboard.zzatmari.src.list.model.PostListReq;
 import com.springboard.zzatmari.src.list.model.PostListRes;
@@ -58,8 +59,15 @@ public class GoalService {
     //목표 초기화
     public void resetGoals(int userIdx) throws BaseException {
 
+        //목표 존재여부 체크
+        int isExist = goalProvider.checkUserGoals(userIdx);
+
+        if(isExist == 0)
+            return;
+
         try{
                 int result = goalDao.resetGoals(userIdx);
+                System.out.println(result);
                 if(result == 0)
                     throw new BaseException(REQUEST_FAIL);
 
