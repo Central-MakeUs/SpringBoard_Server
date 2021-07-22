@@ -74,6 +74,25 @@ public class GoalController {
         }
     }
 
+    /**
+     * 목표 초기화 API
+     * [PATCH] /goals
+     * @return BaseResponse<>
+     */
+    @ResponseBody
+    @PatchMapping("")
+    public BaseResponse<String> resetGoals() {
+        try{
+            int userIdx = jwtService.getUserIdx();
+
+            goalService.resetGoals(userIdx);
+            return new BaseResponse<String>("");
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 }
 
 

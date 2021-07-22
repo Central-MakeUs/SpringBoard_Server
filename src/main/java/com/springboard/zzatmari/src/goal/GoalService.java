@@ -55,5 +55,19 @@ public class GoalService {
         }
     }
 
+    //목표 초기화
+    public void resetGoals(int userIdx) throws BaseException {
+
+        try{
+                int result = goalDao.resetGoals(userIdx);
+                if(result == 0)
+                    throw new BaseException(REQUEST_FAIL);
+
+
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 }
 

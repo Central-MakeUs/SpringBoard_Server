@@ -75,4 +75,12 @@ public class GoalDao {
         Object[] insertGoalParams = new Object[]{userIdx, postGoalReq.getListIdx(), postGoalReq.getTime()};
         return this.jdbcTemplate.update(insertGoalQuery, insertGoalParams);
     }
+
+    //목표 초기화
+    public int resetGoals(int userIdx){
+        String resetGoalsQuery = "UPDATE Goal SET goalTime=0 WHERE userIdx=?";
+        Object[] resetGoalsParams = new Object[]{userIdx};
+
+        return this.jdbcTemplate.update(resetGoalsQuery, resetGoalsParams);
+    }
 }
