@@ -62,8 +62,10 @@ public class GoalService {
         //목표 존재여부 체크
         int isExist = goalProvider.checkUserGoals(userIdx);
 
-        if(isExist == 0)
+        if(isExist == 0){
+            goalDao.insertGoalDefault(userIdx);
             return;
+        } //목표 하나도 없으면 리스트 하나 목표로 생성
 
         try {
 

@@ -68,13 +68,6 @@ public class GoalDao {
                 boolean.class
                 ,selectGoalResetCheckParams);
 
-        int isExist = this.jdbcTemplate.queryForObject(selectGoalCheckQuery,
-                int.class
-                ,selectGoalResetCheckParams);
-
-        if(isExist == 0)
-            resetCheck = true;
-
         return new GetGoalsRes(!resetCheck, result1, result2);
     }
 
@@ -135,5 +128,17 @@ public class GoalDao {
         Object[] resetGoalsParams = new Object[]{userIdx};
 
         return this.jdbcTemplate.update(resetGoalsQuery, resetGoalsParams);
+    }
+
+    //목표 0개일때, 초기 목표 1개 추가
+    public int insertGoalDefault(int userIdx){
+        String selectGoalQuery = "SELECT idx FROM List WHERE userIdx=? AND status=0 limit 1";
+        Object[] selectGoalParams = new Object[]{userIdx};
+
+        int listIdx = this.jdbcTemplate.queryForObject(selectGoalQuery, int.class, selectGoalParams);
+
+        String insertGoalQuery = "INSERT INTO Goal(userIdx, listIdx) VALUES(?,?)";
+        Object[] insertGoalParams = new Object[]{userIdx, listIdx};
+        return this.jdbcTemplate.update(insertGoalQuery, insertGoalParams);
     }
 }

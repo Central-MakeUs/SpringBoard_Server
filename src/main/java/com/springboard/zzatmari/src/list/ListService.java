@@ -50,7 +50,6 @@ public class ListService {
         }
 
         try{
-            System.out.println("hoi");
             int listIdx = listDao.insertLists(postListReq, userIdx);
             return new PostListRes(listIdx);
         } catch (Exception exception) {
