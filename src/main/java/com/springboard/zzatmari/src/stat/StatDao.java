@@ -25,11 +25,16 @@ public class StatDao {
 
     //통계 달력 조회
     public GetStatsRes selectStats(int userIdx, int year, int month) {
-        String selectStatsQuery = "SELECT DAY(executionDate) day, case when time>100 then 100 else time end percent\n" +
-                "FROM (SELECT TRUNCATE((SUM(E.min)/E.goalTime)*100,0) time, executionDate, listIdx FROM Execution E WHERE status=2 GROUP BY executionDate) E\n" +
+        String selectStatsQuery = "SELECT day, case when time>=100 then 100 else time end percent\n" +
+                "FROM\n" +
+                "(SELECT DAY(executionDate) day, ifnull(TRUNCATE((SUM(E.min)/SUM(E.goalTime))*100,0),0) time\n" +
+                "FROM (SELECT SUM(E.min) min, E.goalTime, DATE_FORMAT(executionDate, '%Y-%m-%d') executionDate, listIdx FROM Execution E WHERE status=2 GROUP BY listIdx, DATE_FORMAT(executionDate, '%Y-%m-%d')) E\n" +
                 "JOIN List L on L.idx=E.listIdx\n" +
                 "JOIN User U on U.idx=L.userIdx\n" +
-                "WHERE U.idx=? AND YEAR(executionDate)=? AND MONTH(executionDate)=? AND time>0 ORDER BY day";
+                "WHERE U.idx=? AND YEAR(executionDate)=? AND MONTH(executionDate)=?\n" +
+                "GROUP BY executionDate) S\n" +
+                "WHERE time > 0\n" +
+                "ORDER BY day";
         Object[] selectStatsParams = new Object[]{userIdx, year, month};
         List<Stat> statList = this.jdbcTemplate.query(selectStatsQuery,
                 (rs, rowNum) -> new Stat(
