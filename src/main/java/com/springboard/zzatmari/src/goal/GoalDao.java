@@ -70,12 +70,21 @@ public class GoalDao {
 
     //목표 중복체크
     public int checkGoal(int userIdx,int listIdx){
-        String checkGoalsQuery = "SELECT EXISTS(SELECT ListIdx FROM Goal WHERE listIdx=? AND userIdx=?)";
+        String checkGoalsQuery = "SELECT EXISTS(SELECT listIdx FROM Goal WHERE listIdx=? AND userIdx=?)";
         Object[] checkGoalsParams = new Object[]{listIdx, userIdx};
         return this.jdbcTemplate.queryForObject(checkGoalsQuery,
                 int.class,
                 checkGoalsParams);
 
+    }
+
+    //목표 시간 체크
+    public int checkGoalTime(int listIdx){
+        String checkGoalTimeQuery = "SELECT goalTime FROM Goal WHERE listIdx=?";
+        Object[] checkGoalTimeParams = new Object[]{listIdx};
+        return this.jdbcTemplate.queryForObject(checkGoalTimeQuery,
+                int.class,
+                checkGoalTimeParams);
     }
 
     //목표 업데이트

@@ -46,4 +46,14 @@ public class GoalProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    //목표 시간 채크
+    public int checkGoalTime(int listIdx) throws BaseException{
+        try{
+            return goalDao.checkGoalTime(listIdx);
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

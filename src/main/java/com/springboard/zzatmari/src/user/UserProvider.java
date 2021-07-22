@@ -51,6 +51,15 @@ public class UserProvider {
         }
     }
 
+    //사용자 하루시작시간 체크
+    public String checkUserTime(int userIdx) throws BaseException{
+        try{
+            return userDao.checkUserTime(userIdx);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     public List<GetUserRes> getUsers() throws BaseException{
         try{
             List<GetUserRes> getUserRes = userDao.getUsers();

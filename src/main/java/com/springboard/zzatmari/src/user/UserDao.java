@@ -28,6 +28,15 @@ public class UserDao {
         return this.jdbcTemplate.update(updateUserTimeQuery,updateUserTimeParams);
     }
 
+    //하루 시작시간 체크
+    public String checkUserTime(int userIdx){
+        String checkUserTimeQuery = "select case when U.dayStartHour <= DATE_FORMAT(now(), '%H') then DATE_FORMAT(CURDATE(),'%Y-%m-%d %H:%i:%S') else DATE_FORMAT(CURDATE()-1,'%Y-%m-%d %H:%i:%S') end date from User U where idx=?";
+
+        Object[] checkUserTimeParams = new Object[]{userIdx};
+
+        return this.jdbcTemplate.queryForObject(checkUserTimeQuery, String.class, checkUserTimeParams);
+    }
+
     //씨앗창고조회
     public List<GetUserSeedRes> selectUserSeeds(int userIdx){
         String selectUserSeedsQuery = "SELECT US.seedIdx seedIdx, seedName, seedImgUrl\n" +

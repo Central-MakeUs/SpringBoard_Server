@@ -23,9 +23,9 @@ public class ExecutionDao {
     }
 
     //실행 추가
-    public int insertExecution(int userIdx, int listIdx, int time){
-        String insertExecutionQuery = "INSERT INTO Execution(userIdx, listIdx, timer) VALUES(?,?,?)";
-        Object[] insertExecutionParams = new Object[]{userIdx, listIdx, time};
+    public int insertExecution(int userIdx, int listIdx, int time, int goalTime, String executionDate){
+        String insertExecutionQuery = "INSERT INTO Execution(userIdx, listIdx, timer, goalTime, executionDate) VALUES(?,?,?,?,?)";
+        Object[] insertExecutionParams = new Object[]{userIdx, listIdx, time, goalTime, executionDate};
         this.jdbcTemplate.update(insertExecutionQuery, insertExecutionParams);
 
         String lastInsertIdQuery = "select last_insert_id()";

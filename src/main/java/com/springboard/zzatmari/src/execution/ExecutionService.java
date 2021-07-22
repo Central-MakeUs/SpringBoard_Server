@@ -10,6 +10,7 @@ import com.springboard.zzatmari.src.goal.GoalProvider;
 import com.springboard.zzatmari.src.goal.model.PostGoalReq;
 import com.springboard.zzatmari.src.timer.TimerProvider;
 import com.springboard.zzatmari.src.timer.model.PostTimerRes;
+import com.springboard.zzatmari.src.user.UserProvider;
 import com.springboard.zzatmari.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,14 +26,18 @@ public class ExecutionService {
     private final ExecutionDao executionDao;
     private final ExecutionProvider executionProvider;
     private final TimerProvider timerProvider;
+    private final GoalProvider goalProvider;
+    private final UserProvider userProvider;
     private final JwtService jwtService;
 
 
     @Autowired
-    public ExecutionService(ExecutionDao executionDao, ExecutionProvider executionProvider, TimerProvider timerProvider, JwtService jwtService) {
+    public ExecutionService(ExecutionDao executionDao, ExecutionProvider executionProvider, TimerProvider timerProvider, GoalProvider goalProvider, UserProvider userProvider, JwtService jwtService) {
         this.executionDao = executionDao;
         this.executionProvider = executionProvider;
         this.timerProvider = timerProvider;
+        this.goalProvider = goalProvider;
+        this.userProvider = userProvider;
         this.jwtService = jwtService;
 
     }
@@ -48,9 +53,15 @@ public class ExecutionService {
         //타이머 확인
         int time = timerProvider.getTimer(postExecutionStartReq.getTimerIdx());
 
+        //목표 시간 확인
+        int goalTime = goalProvider.checkGoalTime(postExecutionStartReq.getListIdx());
+
+        //사용자 하루 시작시간
+        String executionDate = userProvider.checkUserTime(userIdx);
+
         try{
             //추가
-            int executionIdx = executionDao.insertExecution(userIdx, postExecutionStartReq.getListIdx(), time);
+            int executionIdx = executionDao.insertExecution(userIdx, postExecutionStartReq.getListIdx(), time, goalTime, executionDate);
             return new PostExecutionStartRes(executionIdx);
 
         } catch (Exception exception) {
