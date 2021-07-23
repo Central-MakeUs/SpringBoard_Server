@@ -1,6 +1,7 @@
 package com.springboard.zzatmari.src.goal;
 
 import com.springboard.zzatmari.src.goal.model.GetGoalsRes;
+import com.springboard.zzatmari.src.goal.model.Goal;
 import com.springboard.zzatmari.src.goal.model.GoalLists;
 import com.springboard.zzatmari.src.goal.model.PostGoalReq;
 import com.springboard.zzatmari.src.list.model.GetListsRes;
@@ -82,11 +83,13 @@ public class GoalDao {
     }
 
     //목표 시간 체크
-    public int checkGoalTime(int listIdx){
-        String checkGoalTimeQuery = "SELECT goalTime FROM Goal WHERE listIdx=?";
+    public Goal checkGoalTime(int listIdx){
+        String checkGoalTimeQuery = "SELECT count(*) count, goalTime FROM Goal WHERE listIdx=?";
         Object[] checkGoalTimeParams = new Object[]{listIdx};
         return this.jdbcTemplate.queryForObject(checkGoalTimeQuery,
-                int.class,
+                (rs,rowNum)-> new Goal(
+                        rs.getInt("count"),
+                        rs.getInt("goalTime")),
                 checkGoalTimeParams);
     }
 

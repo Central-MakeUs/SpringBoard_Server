@@ -22,11 +22,12 @@ public class UserDao {
     //하루 시작시간 설정
     public int updateUserTime(PostUserTimeReq postUserTimeReq, int userIdx){
         String updateUserTimeQuery = "UPDATE User SET dayStartHour=?, dayStartMinute=? WHERE idx=?;";
-        String updateExecutionDateQuery = "UPDATE Execution SET executionDate=? WHERE userIdx=? AND executionDate=?;";
-
+        String updateExecutionDateQuery = "UPDATE Execution SET executionDate=DATE_FORMAT(CURDATE()-1, '%Y-%m-%d %H:%i:%S') WHERE userIdx=? AND DATE_FORMAT(updatedAt, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d') AND TIME_FORMAT(updatedAt, '%H:%i') < TIME_FORMAT('"+ postUserTimeReq.getHour()+":"+ postUserTimeReq.getMinute()+"', '%H:%i')\n";
+        System.out.println(updateExecutionDateQuery);
         Object[] updateUserTimeParams = new Object[]{postUserTimeReq.getHour(), postUserTimeReq.getMinute(), userIdx};
-        Object[] updateExecutionDateParams = new Object[]{postUserTimeReq.getHour(), postUserTimeReq.getMinute(), userIdx};
+        Object[] updateExecutionDateParams = new Object[]{userIdx};
 
+        this.jdbcTemplate.update(updateExecutionDateQuery,updateExecutionDateParams);
         return this.jdbcTemplate.update(updateUserTimeQuery,updateUserTimeParams);
     }
 

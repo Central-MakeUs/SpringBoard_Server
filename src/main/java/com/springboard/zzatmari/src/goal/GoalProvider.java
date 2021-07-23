@@ -2,6 +2,7 @@ package com.springboard.zzatmari.src.goal;
 
 import com.springboard.zzatmari.config.BaseException;
 import com.springboard.zzatmari.src.goal.model.GetGoalsRes;
+import com.springboard.zzatmari.src.goal.model.Goal;
 import com.springboard.zzatmari.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +49,7 @@ public class GoalProvider {
     }
 
     //목표 시간 채크
-    public int checkGoalTime(int listIdx) throws BaseException{
+    public Goal checkGoalTime(int listIdx) throws BaseException{
         try{
             return goalDao.checkGoalTime(listIdx);
         }

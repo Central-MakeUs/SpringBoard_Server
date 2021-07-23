@@ -7,6 +7,7 @@ import com.springboard.zzatmari.src.execution.model.PostExecutionStartReq;
 import com.springboard.zzatmari.src.execution.model.PostExecutionStartRes;
 import com.springboard.zzatmari.src.goal.GoalDao;
 import com.springboard.zzatmari.src.goal.GoalProvider;
+import com.springboard.zzatmari.src.goal.model.Goal;
 import com.springboard.zzatmari.src.goal.model.PostGoalReq;
 import com.springboard.zzatmari.src.timer.TimerProvider;
 import com.springboard.zzatmari.src.timer.model.PostTimerRes;
@@ -54,7 +55,10 @@ public class ExecutionService {
         int time = timerProvider.getTimer(postExecutionStartReq.getTimerIdx());
 
         //목표 시간 확인
-        int goalTime = goalProvider.checkGoalTime(postExecutionStartReq.getListIdx());
+        Goal goal = goalProvider.checkGoalTime(postExecutionStartReq.getListIdx());
+        int goalTime = 0;
+        if(goal.getCount() != 0)
+            goalTime = goal.getGoalTime();
 
         //사용자 하루 시작시간
         String executionDate = userProvider.checkUserTime(userIdx);
