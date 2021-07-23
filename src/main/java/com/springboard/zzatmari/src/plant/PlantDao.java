@@ -21,12 +21,18 @@ public class PlantDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    //씨앗심기
+    //씨앗심기, 씨앗수확
     public int updateUserSeedStatus(int userIdx, int seedIdx, int status){
-        String updateUserSeedStatusQuery = "UPDATE UserSeed SET status=? WHERE status=? AND userIdx=? AND seedIdx=? LIMIT 1";
+        String updateUserSeedStatusQuery1 = "UPDATE UserSeed SET status=? WHERE status=? AND userIdx=? AND seedIdx=? LIMIT 1";
+        String updateUserSeedStatusQuery2 = "UPDATE UserSeed SET status=? WHERE status=? AND userIdx=? AND idx=? LIMIT 1";
 
         Object[] updateUserSeedStatusParams = new Object[]{status, status-1, userIdx, seedIdx};
-        return this.jdbcTemplate.update(updateUserSeedStatusQuery, updateUserSeedStatusParams);
+        if(status==1){
+            return this.jdbcTemplate.update(updateUserSeedStatusQuery1, updateUserSeedStatusParams);
+        }
+        else{
+            return this.jdbcTemplate.update(updateUserSeedStatusQuery2, updateUserSeedStatusParams);
+        }
     }
 
     //키우고있는 식물 조회

@@ -29,14 +29,19 @@ public class PlantService {
         this.jwtService = jwtService;
     }
 
-    //씨앗심기
+    //씨앗심기, 식물 수확
     public void plantSeed(int userIdx, int seedIdx, int status) throws BaseException {
 
         //사용자 현재 식물 조회
         Plant plant = plantProvider.checkUserPlant(userIdx);
 
-        if(plant.getCount() != 0)
+        //이미 심어져 있는 경우
+        if(plant.getCount() != 0 && status==1)
             throw new BaseException(PLANTS_IS_EXIST);
+
+        //수확할게 없는 경우
+        if(plant.getCount() == 0 && status==2)
+            throw new BaseException(PLANTS_IS_NOT_EXIST);
 
         try{
             int result = plantDao.updateUserSeedStatus(userIdx, seedIdx, status);
