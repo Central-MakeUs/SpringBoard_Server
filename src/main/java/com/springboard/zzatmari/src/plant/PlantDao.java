@@ -31,6 +31,10 @@ public class PlantDao {
             return this.jdbcTemplate.update(updateUserSeedStatusQuery1, updateUserSeedStatusParams);
         }
         else{
+            String updateUserSunlightQuery = "UPDATE User SET sunlight = sunlight+(SELECT rewardSunlight FROM SeedInfo S JOIN UserSeed US ON US.seedIdx=S.idx WHERE US.idx=?) WHERE idx=?";
+            Object[] updateUserSunlightParams = new Object[]{seedIdx, userIdx};
+
+            this.jdbcTemplate.update(updateUserSunlightQuery, updateUserSunlightParams);
             return this.jdbcTemplate.update(updateUserSeedStatusQuery2, updateUserSeedStatusParams);
         }
     }
