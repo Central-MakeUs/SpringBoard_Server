@@ -28,7 +28,7 @@ public class StatDao {
         String selectStatsQuery = "SELECT day, case when time>100 then 100 else time end percent\n" +
                 "FROM\n" +
                 "(SELECT DAY(executionDate) day, ifnull(TRUNCATE((SUM(E.min)/SUM(E.goalTime))*100,0),0) time\n" +
-                "FROM (SELECT SUM(E.min) min, E.goalTime, DATE_FORMAT(executionDate, '%Y-%m-%d') executionDate FROM Execution E WHERE status=2 AND userIdx=? GROUP BY listIdx) E\n" +
+                "FROM (SELECT SUM(E.min) min, E.goalTime, DATE_FORMAT(executionDate, '%Y-%m-%d') executionDate FROM Execution E WHERE status=2 AND userIdx=? GROUP BY executionDate, listIdx) E\n" +
                 "WHERE YEAR(executionDate)=? AND MONTH(executionDate)=?\n" +
                 "GROUP BY executionDate) S\n" +
                 "WHERE time > 0\n" +
