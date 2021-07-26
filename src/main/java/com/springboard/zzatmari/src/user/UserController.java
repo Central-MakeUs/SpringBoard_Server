@@ -91,7 +91,7 @@ public class UserController {
      */
     //Query String
     @ResponseBody
-    @GetMapping("/{userIdx}/seed") // (GET) 127.0.0.1:9000/app/users
+    @GetMapping("/{userIdx}/seed")
     public BaseResponse<List<GetUserSeedRes>> getUserSeeds(@PathVariable int userIdx) {
         try{
             if(userIdx <= 0){

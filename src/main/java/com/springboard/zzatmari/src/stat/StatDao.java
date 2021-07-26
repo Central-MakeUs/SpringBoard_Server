@@ -25,13 +25,11 @@ public class StatDao {
 
     //통계 달력 조회
     public GetStatsRes selectStats(int userIdx, int year, int month) {
-        String selectStatsQuery = "SELECT day, case when time>=100 then 100 else time end percent\n" +
+        String selectStatsQuery = "SELECT day, case when time>100 then 100 else time end percent\n" +
                 "FROM\n" +
                 "(SELECT DAY(executionDate) day, ifnull(TRUNCATE((SUM(E.min)/SUM(E.goalTime))*100,0),0) time\n" +
-                "FROM (SELECT SUM(E.min) min, E.goalTime, DATE_FORMAT(executionDate, '%Y-%m-%d') executionDate, listIdx FROM Execution E WHERE status=2 GROUP BY listIdx, DATE_FORMAT(executionDate, '%Y-%m-%d')) E\n" +
-                "JOIN List L on L.idx=E.listIdx\n" +
-                "JOIN User U on U.idx=L.userIdx\n" +
-                "WHERE U.idx=? AND YEAR(executionDate)=? AND MONTH(executionDate)=?\n" +
+                "FROM (SELECT SUM(E.min) min, E.goalTime, DATE_FORMAT(executionDate, '%Y-%m-%d') executionDate FROM Execution E WHERE status=2 AND userIdx=? GROUP BY listIdx) E\n" +
+                "WHERE YEAR(executionDate)=? AND MONTH(executionDate)=?\n" +
                 "GROUP BY executionDate) S\n" +
                 "WHERE time > 0\n" +
                 "ORDER BY day";
