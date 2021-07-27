@@ -96,13 +96,14 @@ public class UserDao {
 
     //사용자 이메일 체크
     public UserEmail checkUserEmail(String email){
-        String checkUserEmailQuery = "SELECT count(*) count, ifnull(idx,0) userIdx, email, loginType FROM User WHERE email=?";
+        String checkUserEmailQuery = "SELECT count(*) count, ifnull(idx,0) userIdx, email, password, loginType FROM User WHERE email=?";
         String checkUserEmailParams = email;
         return this.jdbcTemplate.queryForObject(checkUserEmailQuery,
                 (rs,rowNum) -> new UserEmail(
                         rs.getInt("count"),
                         rs.getInt("userIdx"),
                         rs.getString("email"),
+                        rs.getString("password"),
                         rs.getInt("loginType")),
                 checkUserEmailParams);
 

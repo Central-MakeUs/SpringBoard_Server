@@ -11,5 +11,6 @@ public class UserEmail {
     private int count;
     private int userIdx;
     private String email;
+    private String password;
     private int loginType;
 }

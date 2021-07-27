@@ -88,6 +88,7 @@ public enum BaseResponseStatus {
     //User
     POST_USERS_EMAIL_EXIST_SOCIAL(false, 3010, "소셜회원은 소셜로그인을 이용해주세요"),
     POST_USERS_EMAIL_EXIST(false, 3011, "중복된 이메일입니다"),
+    USERS_LOGIN_NOT_MATCH(false, 3012, "아이디 또는 비밀번호가 일치하지 않습니다"),
 
     //List
     LISTS_EXIST_NAME(false, 3020, "이미 존재하는 리스트 항목입니다"),

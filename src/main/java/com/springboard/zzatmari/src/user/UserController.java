@@ -150,11 +150,10 @@ public class UserController {
 
 
     /**
-     * 회원가입 API
-     * [POST] /users
+     * 로그인 API
+     * [POST] /users?type=?
      * @return BaseResponse<PostUserRes>
      */
-    // Body
     @ResponseBody
     @PostMapping("")
     public BaseResponse<PostUserRes> createUser(@RequestParam String type, @RequestBody PostUserReq postUserReq) {
@@ -173,14 +172,29 @@ public class UserController {
             PostUserRes postUserRes = userService.createUnknownUser(postUserReq);
             return new BaseResponse<>(postUserRes);
         }
+        else if(t == 1){ //이메일 로그인
+            if(postUserReq.getEmail() == null)
+                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            if(!isRegexEmail(postUserReq.getEmail()))
+                return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+
+            if(postUserReq.getPassword() == null)
+                return new BaseResponse<>(POST_USERS_PASSWORD_EMPTY);
+            if(postUserReq.getPassword().length() < 6 || postUserReq.getPassword().length() > 15)
+                return new BaseResponse<>(POST_USERS_PASSWORD_LENGTH);
+
+            PostUserRes postUserRes = userService.loginEmailUser(postUserReq);
+            return new BaseResponse<>(postUserRes);
+        }
 
         return new BaseResponse<>(USERS_TYPE_ERROR_TYPE);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
     /**
-     * 로그인 API
+     *
      * [POST] /users/logIn
      * @return BaseResponse<PostLoginRes>
      */

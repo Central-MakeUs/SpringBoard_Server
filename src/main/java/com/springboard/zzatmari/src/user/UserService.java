@@ -79,6 +79,36 @@ public class UserService {
         }
     }
 
+    //이메일 로그인
+    public PostUserRes loginEmailUser(PostUserReq postUserReq) throws BaseException {
+
+        UserEmail userEmail = userProvider.checkUserEmail(postUserReq.getEmail());
+
+        String pwd;
+        try{
+            //암호화
+            pwd = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(postUserReq.getPassword());
+            postUserReq.setPassword(pwd);
+        } catch (Exception ignored) {
+            throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
+        }
+
+        //이메일, 비밀번호 확인
+        if(userEmail.getCount() > 0 && userEmail.getLoginType() != 1)
+            throw new BaseException(POST_USERS_EMAIL_EXIST_SOCIAL);
+
+        if(userEmail.getCount() == 0 || !(userEmail.getPassword().equals(postUserReq.getPassword())))
+            throw new BaseException(USERS_LOGIN_NOT_MATCH);
+
+        try{
+            //jwt 발급.
+            String jwt = jwtService.createJwt(userEmail.getUserIdx());
+            return new PostUserRes(jwt,userEmail.getUserIdx());
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     //새로 추가된 사용자에 대한 기본값 세팅
     public void createUserDefault(int userIdx) throws BaseException {
         System.out.println("hi");
