@@ -109,6 +109,19 @@ public class UserDao {
 
     }
 
+    //사용자 체크
+    public User checkUser(int userIdx){
+        String checkUserQuery = "select idx userIdx, email, password from User where idx=?";
+        int checkUserParams = userIdx;
+        return this.jdbcTemplate.queryForObject(checkUserQuery,
+                (rs,rowNum) -> new User(
+                        rs.getInt("userIdx"),
+                        rs.getString("email"),
+                        rs.getString("password")),
+                checkUserParams);
+
+    }
+
 
     public List<GetUserRes> getUsers(){
         String getUsersQuery = "select * from UserInfo";
@@ -155,9 +168,10 @@ public class UserDao {
 
     }
 
-    public int modifyUserName(PatchUserReq patchUserReq){
-        String modifyUserNameQuery = "update UserInfo set userName = ? where userIdx = ? ";
-        Object[] modifyUserNameParams = new Object[]{patchUserReq.getUserName(), patchUserReq.getUserIdx()};
+    //비밀번호 변경
+    public int modifyPassword(int userIdx, String password){
+        String modifyUserNameQuery = "update User set password=? where idx = ?";
+        Object[] modifyUserNameParams = new Object[]{password, userIdx};
 
         return this.jdbcTemplate.update(modifyUserNameQuery,modifyUserNameParams);
     }
@@ -170,10 +184,7 @@ public class UserDao {
                 (rs,rowNum)-> new User(
                         rs.getInt("userIdx"),
                         rs.getString("ID"),
-                        rs.getString("userName"),
-                        rs.getString("password"),
-                        rs.getString("email")
-                ),
+                        rs.getString("userName")),
                 getPwdParams
                 );
 

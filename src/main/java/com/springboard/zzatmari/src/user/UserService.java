@@ -149,11 +149,37 @@ public class UserService {
         }
     }
 
-    public void modifyUserName(PatchUserReq patchUserReq) throws BaseException {
+    //비밀번호 변경
+    public void modifyPassword(int userIdx, PatchUserPasswordReq patchUserPasswordReq) throws BaseException {
+
+
+            //비밀번호 확인
+            User user = userProvider.checkUser(userIdx);
+
+            String pwd;
+            try{
+                //암호화
+                pwd = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(patchUserPasswordReq.getNowPassword());
+                patchUserPasswordReq.setNowPassword(pwd);
+            } catch (Exception ignored) {
+                throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
+            }
+
+            if(!(user.getPassword().equals(patchUserPasswordReq.getNowPassword())))
+                throw new BaseException(USERS_PASSWORD_NOT_MATCH);
+
+            try{
+                //암호화
+                pwd = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(patchUserPasswordReq.getNewPassword());
+                patchUserPasswordReq.setNewPassword(pwd);
+            } catch (Exception ignored) {
+                throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
+            }
+
         try{
-            int result = userDao.modifyUserName(patchUserReq);
+            int result = userDao.modifyPassword(userIdx, patchUserPasswordReq.getNewPassword());
             if(result == 0){
-                throw new BaseException(MODIFY_FAIL_USERNAME);
+                throw new BaseException(REQUEST_FAIL);
             }
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);

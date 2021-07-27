@@ -33,6 +33,8 @@ public enum BaseResponseStatus {
     POST_USERS_PASSWORD_EMPTY(false,2017,"비밀번호를 입력해주세요"),
     POST_USERS_PASSWORD_LENGTH(false,2018,"비밀번호는 6-15자를 포함해야합니다"),
     USERS_ID_JWT_NOT_MATCH(false,2019,"userIdx와 jwt가 일치하지 않습니다"),
+    USERS_NOW_PASSWORD_EMPTY(false,2110,"현재 비밀번호를 입력해주세요"),
+    USERS_NEW_PASSWORD_EMPTY(false,2111,"새 비밀번호를 입력해주세요"),
 
     //lists
     LISTS_TYPE_ERROR_TYPE(false, 2020, "리스트 타입은 0 또는 1값을 입력해주세요"),
@@ -90,6 +92,7 @@ public enum BaseResponseStatus {
     POST_USERS_EMAIL_EXIST_SOCIAL(false, 3010, "소셜회원은 소셜로그인을 이용해주세요"),
     POST_USERS_EMAIL_EXIST(false, 3011, "중복된 이메일입니다"),
     USERS_LOGIN_NOT_MATCH(false, 3012, "아이디 또는 비밀번호가 일치하지 않습니다"),
+    USERS_PASSWORD_NOT_MATCH(false, 3013, "현재 비밀번호가 일치하지 않습니다"),
 
     //List
     LISTS_EXIST_NAME(false, 3020, "이미 존재하는 리스트 항목입니다"),

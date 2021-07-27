@@ -196,6 +196,39 @@ public class UserController {
     }
 
     /**
+     * 비밀번호 변경
+     * [PATCH] /users/:userIdx/password
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("{userIdx}/password")
+    public BaseResponse<String> modifyPassword(@PathVariable("userIdx") int userIdx, @RequestBody PatchUserPasswordReq patchUserPasswordReq){
+        try {
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(USERS_ID_JWT_NOT_MATCH);
+            }
+
+            if(patchUserPasswordReq.getNowPassword() == null)
+                return new BaseResponse<>(USERS_NOW_PASSWORD_EMPTY);
+            if(patchUserPasswordReq.getNewPassword() == null)
+                return new BaseResponse<>(USERS_NEW_PASSWORD_EMPTY);
+            if(patchUserPasswordReq.getNowPassword().length() < 6 || patchUserPasswordReq.getNowPassword().length()>15 || patchUserPasswordReq.getNewPassword().length()<6 || patchUserPasswordReq.getNewPassword().length()>15)
+                return new BaseResponse<>(POST_USERS_PASSWORD_LENGTH);
+
+
+            userService.modifyPassword(userIdx, patchUserPasswordReq);
+
+            String result = "";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
      *
      * [POST] /users/logIn
      * @return BaseResponse<PostLoginRes>
@@ -210,32 +243,6 @@ public class UserController {
             return new BaseResponse<>(postLoginRes);
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
-        }
-    }
-
-    /**
-     * 유저정보변경 API
-     * [PATCH] /users/:userIdx
-     * @return BaseResponse<String>
-     */
-    @ResponseBody
-    @PatchMapping("/{userIdx}")
-    public BaseResponse<String> modifyUserName(@PathVariable("userIdx") int userIdx, @RequestBody User user){
-        try {
-            //jwt에서 idx 추출.
-            int userIdxByJwt = jwtService.getUserIdx();
-            //userIdx와 접근한 유저가 같은지 확인
-            if(userIdx != userIdxByJwt){
-                return new BaseResponse<>(INVALID_USER_JWT);
-            }
-            //같다면 유저네임 변경
-            PatchUserReq patchUserReq = new PatchUserReq(userIdx,user.getUserName());
-            userService.modifyUserName(patchUserReq);
-
-            String result = "";
-        return new BaseResponse<>(result);
-        } catch (BaseException exception) {
-            return new BaseResponse<>((exception.getStatus()));
         }
     }
 

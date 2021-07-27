@@ -99,6 +99,15 @@ public class UserProvider {
         }
     }
 
+    //사용자 체크
+    public User checkUser(int userIdx) throws BaseException{
+        try{
+            return userDao.checkUser(userIdx);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     public int checkEmail(String email) throws BaseException{
         try{
             return userDao.checkEmail(email);
