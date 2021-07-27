@@ -60,6 +60,15 @@ public class UserProvider {
         }
     }
 
+    //사용자 이메일 체크
+    public UserEmail checkUserEmail(String email) throws BaseException{
+        try{
+            return userDao.checkUserEmail(email);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     public List<GetUserRes> getUsers() throws BaseException{
         try{
             List<GetUserRes> getUserRes = userDao.getUsers();

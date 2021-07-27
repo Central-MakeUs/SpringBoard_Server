@@ -94,6 +94,20 @@ public class UserDao {
         return;
     }
 
+    //사용자 이메일 체크
+    public UserEmail checkUserEmail(String email){
+        String checkUserEmailQuery = "SELECT count(*) count, ifnull(idx,0) userIdx, email, loginType FROM User WHERE email=?";
+        String checkUserEmailParams = email;
+        return this.jdbcTemplate.queryForObject(checkUserEmailQuery,
+                (rs,rowNum) -> new UserEmail(
+                        rs.getInt("count"),
+                        rs.getInt("userIdx"),
+                        rs.getString("email"),
+                        rs.getInt("loginType")),
+                checkUserEmailParams);
+
+    }
+
 
     public List<GetUserRes> getUsers(){
         String getUsersQuery = "select * from UserInfo";

@@ -28,6 +28,10 @@ public enum BaseResponseStatus {
     USERS_TOKEN_EMPTY(false, 2012, "token을 입력해주세요"),
     USERS_TYPE_EMPTY(false, 2013, "type을 입력해주세요"),
     USERS_TYPE_ERROR_TYPE(false, 2014, "type이 올바르지 않습니다"),
+    POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력해주세요"),
+    POST_USERS_INVALID_EMAIL(false, 2016, "유효한 이메일 주소를 입력하세요"),
+    POST_USERS_PASSWORD_EMPTY(false,2017,"비밀번호를 입력해주세요"),
+    POST_USERS_PASSWORD_LENGTH(false,2018,"비밀번호는 6-15자를 포함해야합니다"),
 
     //lists
     LISTS_TYPE_ERROR_TYPE(false, 2020, "리스트 타입은 0 또는 1값을 입력해주세요"),
@@ -74,11 +78,6 @@ public enum BaseResponseStatus {
     // sample
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요"),
 
-    // [POST] /users
-    POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력해주세요"),
-    POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요"),
-    POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다"),
-
 
 
     /**
@@ -86,6 +85,9 @@ public enum BaseResponseStatus {
      */
     // Common
     RESPONSE_ERROR(false, 3000, "값을 불러오는데 실패하였습니다"),
+    //User
+    POST_USERS_EMAIL_EXIST_SOCIAL(false, 3010, "소셜회원은 소셜로그인을 이용해주세요"),
+    POST_USERS_EMAIL_EXIST(false, 3011, "중복된 이메일입니다"),
 
     //List
     LISTS_EXIST_NAME(false, 3020, "이미 존재하는 리스트 항목입니다"),
