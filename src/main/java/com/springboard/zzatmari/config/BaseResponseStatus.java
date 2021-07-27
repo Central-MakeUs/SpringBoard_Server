@@ -32,6 +32,7 @@ public enum BaseResponseStatus {
     POST_USERS_INVALID_EMAIL(false, 2016, "유효한 이메일 주소를 입력하세요"),
     POST_USERS_PASSWORD_EMPTY(false,2017,"비밀번호를 입력해주세요"),
     POST_USERS_PASSWORD_LENGTH(false,2018,"비밀번호는 6-15자를 포함해야합니다"),
+    USERS_ID_JWT_NOT_MATCH(false,2019,"userIdx와 jwt가 일치하지 않습니다"),
 
     //lists
     LISTS_TYPE_ERROR_TYPE(false, 2020, "리스트 타입은 0 또는 1값을 입력해주세요"),

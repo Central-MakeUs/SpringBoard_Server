@@ -89,7 +89,7 @@ public class UserProvider {
         }
                     }
 
-
+    //사용자 정보 조회
     public GetUserRes getUser(int userIdx) throws BaseException {
         try {
             GetUserRes getUserRes = userDao.getUser(userIdx);

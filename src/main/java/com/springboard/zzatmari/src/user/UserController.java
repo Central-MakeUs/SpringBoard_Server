@@ -130,16 +130,18 @@ public class UserController {
     }
 
     /**
-     * 회원 1명 조회 API
+     * 사용자 정보 조회 API
      * [GET] /users/:userIdx
      * @return BaseResponse<GetUserRes>
      */
-    // Path-variable
     @ResponseBody
     @GetMapping("/{userIdx}") // (GET) 127.0.0.1:9000/app/users/:userIdx
     public BaseResponse<GetUserRes> getUser(@PathVariable("userIdx") int userIdx) {
-        // Get Users
         try{
+            int userIdxFromJWT = jwtService.getUserIdx();
+            if(userIdx != userIdxFromJWT)
+                return new BaseResponse<>(USERS_ID_JWT_NOT_MATCH);
+
             GetUserRes getUserRes = userProvider.getUser(userIdx);
             return new BaseResponse<>(getUserRes);
         } catch(BaseException exception){
