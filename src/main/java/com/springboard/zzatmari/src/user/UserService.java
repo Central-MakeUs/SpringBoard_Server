@@ -111,7 +111,7 @@ public class UserService {
 
     //새로 추가된 사용자에 대한 기본값 세팅
     public void createUserDefault(int userIdx) throws BaseException {
-        System.out.println("hi");
+
         try{
             //기본타이머 세팅
             userDao.insertUserDefault(userIdx);

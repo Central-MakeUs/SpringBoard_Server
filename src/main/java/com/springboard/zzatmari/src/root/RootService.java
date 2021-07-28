@@ -8,6 +8,7 @@ import com.springboard.zzatmari.src.root.RootProvider;
 import com.springboard.zzatmari.src.root.model.PostSignUpReq;
 import com.springboard.zzatmari.src.root.model.PostSignUpRes;
 import com.springboard.zzatmari.src.user.UserProvider;
+import com.springboard.zzatmari.src.user.UserService;
 import com.springboard.zzatmari.src.user.model.PostUserRes;
 import com.springboard.zzatmari.src.user.model.UserEmail;
 import com.springboard.zzatmari.utils.AES128;
@@ -26,14 +27,16 @@ public class RootService {
     private final RootDao rootDao;
     private final RootProvider rootProvider;
     private final UserProvider userProvider;
+    private final UserService userService;
     private final JwtService jwtService;
 
 
     @Autowired
-    public RootService(RootDao rootDao, RootProvider rootProvider, UserProvider userProvider, JwtService jwtService) {
+    public RootService(RootDao rootDao, RootProvider rootProvider, UserProvider userProvider, UserService userService, JwtService jwtService) {
         this.rootDao = rootDao;
         this.rootProvider = rootProvider;
         this.userProvider = userProvider;
+        this.userService = userService;
         this.jwtService = jwtService;
 
     }
@@ -62,6 +65,8 @@ public class RootService {
         try{
             //회원가입
             int userIdx=rootDao.insertUser(postSignUpReq.getEmail(), postSignUpReq.getPassword());
+
+            userService.createUserDefault(userIdx);
 
             String jwt = jwtService.createJwt(userIdx);
             return new PostSignUpRes(jwt,userIdx);
