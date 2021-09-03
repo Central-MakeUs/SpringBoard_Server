@@ -88,11 +88,14 @@ public enum BaseResponseStatus {
      */
     // Common
     RESPONSE_ERROR(false, 3000, "값을 불러오는데 실패하였습니다"),
+
     //User
     POST_USERS_EMAIL_EXIST_SOCIAL(false, 3010, "소셜회원은 소셜로그인을 이용해주세요"),
     POST_USERS_EMAIL_EXIST(false, 3011, "중복된 이메일입니다"),
     USERS_LOGIN_NOT_MATCH(false, 3012, "아이디 또는 비밀번호가 일치하지 않습니다"),
     USERS_PASSWORD_NOT_MATCH(false, 3013, "현재 비밀번호가 일치하지 않습니다"),
+    USERS_EMAIL_NOT_EXIST(false, 3014, "이메일이 존재하지 않는 사용자입니다"),
+    POST_USERS_EMAIL_EXIST_EMAIL(false, 3015, "이메일회원은 이메일로그인을 이용해주세요"),
 
     //List
     LISTS_EXIST_NAME(false, 3020, "이미 존재하는 리스트 항목입니다"),
@@ -119,6 +122,8 @@ public enum BaseResponseStatus {
     DATABASE_ERROR(false, 4000, "데이터베이스 연결에 실패하였습니다"),
     SERVER_ERROR(false, 4001, "서버와의 연결에 실패하였습니다"),
     REQUEST_FAIL(false,4002,"요청에 실패했습니다"),
+    SEND_MAIL_FAIL(false,4003,"메일전송에 실패했습니다"),
+    KAKAO_LOGIN_FAIL(false,4004,"카카오 로그인에 실패했습니다"),
 
     //[PATCH] /users/{userIdx}
     MODIFY_FAIL_USERNAME(false,4014,"유저네임 수정 실패"),

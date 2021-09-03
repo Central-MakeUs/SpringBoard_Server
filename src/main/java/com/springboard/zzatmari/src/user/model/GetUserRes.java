@@ -10,4 +10,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetUserRes {
     private String email;
+    private boolean timeSet;
 }

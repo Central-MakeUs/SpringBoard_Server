@@ -81,6 +81,16 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
     }
 
+    //카카오 회원가입
+    public int createKakaoUser(String email){
+        String createKakaoUserQuery = "insert into User (email, loginType) VALUES (?, 2)";
+        Object[] createKakaoUserParams = new Object[]{email};
+        this.jdbcTemplate.update(createKakaoUserQuery, createKakaoUserParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+    }
+
     //사용자 기본값 설정
         public void insertUserDefault(int userIdx){
         String createUserDefaultQuery = "insert into Timer(userIdx, timer) VALUES(?, ?)";
@@ -127,8 +137,8 @@ public class UserDao {
         String getUsersQuery = "select * from UserInfo";
         return this.jdbcTemplate.query(getUsersQuery,
                 (rs,rowNum) -> new GetUserRes(
-                        rs.getString("Email"))
-                );
+                        rs.getString("Email"),
+                        rs.getBoolean("timeSet")));
     }
 
     public List<GetUserRes> getUsersByEmail(String email){
@@ -136,16 +146,18 @@ public class UserDao {
         String getUsersByEmailParams = email;
         return this.jdbcTemplate.query(getUsersByEmailQuery,
                 (rs, rowNum) -> new GetUserRes(
-                        rs.getString("Email")),
+                        rs.getString("Email"),
+                        rs.getBoolean("timeSet")),
                 getUsersByEmailParams);
     }
 
     public GetUserRes getUser(int userIdx){
-        String getUserQuery = "select email from User where idx = ?";
+        String getUserQuery = "select email, case when dayStartHour = -1 then false else true end timeSet from User where idx = ?";
         int getUserParams = userIdx;
-        return this.jdbcTemplate.queryForObject(getUserQuery,
+        return  this.jdbcTemplate.queryForObject(getUserQuery,
                 (rs, rowNum) -> new GetUserRes(
-                        rs.getString("email")),
+                        rs.getString("email"),
+                        rs.getBoolean("timeSet")),
                 getUserParams);
     }
     

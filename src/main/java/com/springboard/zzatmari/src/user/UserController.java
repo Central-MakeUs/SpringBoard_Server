@@ -188,6 +188,14 @@ public class UserController {
             PostUserRes postUserRes = userService.loginEmailUser(postUserReq);
             return new BaseResponse<>(postUserRes);
         }
+        else if(t == 2){ //카카오 로그인
+            if(postUserReq.getToken() == null){
+                return new BaseResponse<>(USERS_TOKEN_EMPTY);
+            }
+
+            PostUserRes postUserRes = userService.createKakaoUser(postUserReq);
+            return new BaseResponse<>(postUserRes);
+        }
 
         return new BaseResponse<>(USERS_TYPE_ERROR_TYPE);
         } catch(BaseException exception){
@@ -220,6 +228,27 @@ public class UserController {
 
 
             userService.modifyPassword(userIdx, patchUserPasswordReq);
+
+            String result = "";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 비밀번호 찾기 (메일 전송)
+     * [POST] /users/password
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PostMapping("/password")
+    public BaseResponse<String> forgotPassword(){
+        try {
+            //jwt에서 idx 추출.
+            int userIdx = jwtService.getUserIdx();
+
+            userService.sendEmail(userIdx);
 
             String result = "";
             return new BaseResponse<>(result);

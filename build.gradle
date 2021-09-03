@@ -53,9 +53,9 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter')
     compile('org.springframework.boot:spring-boot-starter-web')
 
-
-
-
+    // Mail
+    implementation('org.springframework.boot:spring-boot-starter-mail')
+    implementation 'com.google.code.gson:gson:2.8.7'
 
 }
 
